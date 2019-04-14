@@ -1,0 +1,84 @@
+% !TeX encoding = UTF-8
+% !TeX program = xelatex
+% !TeX spellcheck = en_US
+
+\documentclass[master]{chinathesis}
+% doctor|master|bachelor [chinese|english] [print|pdf] [super|numebers|authoryear]
+
+\title{基于深度学习的某某方法研究}
+\classnumber{TP396.4} % 中图分类号
+\studentid{2019124007}%学号
+\author{甘木人} % 姓名
+\major{信息与通信工程} % 专业
+\supervisor{某某\ 教授} % 导师
+% \cosupervisor{}
+\date{2019年5月20日} % 注释掉则为今日
+\professionaltype{专业学位类型}
+% \secretlevel{秘密}        % 绝密|机密|秘密，注释本行则不保密
+% \secretyear{20}           % 保密年限
+
+\entitle{Study on the Subgrade Diseases in \\Permafrost of Qinghai-Tibet}
+\enauthor{Wang Dazhi}
+\enmajor{Information and Communication Engineering}
+\ensupervisor{Prof. Zhang Dahai}
+% \encosupervisor{}
+% \endate{May 1, 2017}      % Today if commented
+% \enprofessionaltype{Professional degree type}
+% \ensecretlevel{Secret}    % Top secret|Highly secret|Secret
+
+
+% 加载宏包和配置
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{siunitx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+\newcommand\pkg{\textsf}
+
+\renewcommand\vec{\symbf}
+\newcommand\mat{\symbf}
+\newcommand\ts{\symbfsf}
+\newcommand\real{\mathbf{R}}
+
+
+\begin{document}
+
+\maketitle % 中英文封面
+\makestatement % 论文独创性声明
+%注释掉此两行，可以不生成中英文封面，论文独创性声明,一起由word转为pdf,由下面载入
+%\includepdf[nup=1x1, delta=0mm 0mm,scale=1,pages={1-6}]{front/front.pdf}
+
+\frontmatter
+% 中英文摘要
+\input{chapters/abstract}
+\tableofcontents
+% 图目录
+\listoffigures
+% 表目录
+\listoftables
+% 主要符号表
+\input{chapters/notation}
+
+\mainmatter
+\input{chapters/intro}
+\input{chapters/structure}
+\input{chapters/format}
+\input{chapters/floats}
+\input{chapters/math}
+\input{chapters/citations}
+\bibliography{bibs/refs} % 参考文献
+
+% 附录
+\appendix
+\chapter{论文规范}
+
+\backmatter
+\input{chapters/publications}
+\input{chapters/acknowledgements}
+
+\end{document}
