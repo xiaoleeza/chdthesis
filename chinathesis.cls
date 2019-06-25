@@ -417,7 +417,8 @@
     \parbox[t][3.5cm][c]{\textwidth}{%
       \centering\fontsize{18\bp@}{18\bp@}\selectfont
       \ustc@title\par}\par
-    \vskip 2.03cm%
+      {\fontsize{14\bp@}{31\bp@}\selectfont\ustc@author}\\
+    \vskip 4.03cm%
     {\fontsize{14\bp@}{31\bp@}\selectfont
       \begin{tabular}{lp{8em}rp{8em}}
      导师姓名职称 & \multicolumn{3}{c}{\ustc@supervisor} \\\cline{2-4}    
@@ -865,8 +866,9 @@
   }
   \ifustc@pdf
     \hypersetup{
-      colorlinks = true,
-      allcolors  = blue,
+      %colorlinks = true,
+      %allcolors  = blue,
+	  hidelinks
     }
   \else
     \hypersetup{hidelinks}
