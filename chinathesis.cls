@@ -44,9 +44,7 @@
 \else
   \PassOptionsToClass{scheme=plain}{ctexbook}
 \fi
-\ifustc@pdf
-  \PassOptionsToClass{oneside}{book}
-\fi
+
 \PassOptionsToPackage{quiet}{xeCJK}
 \LoadClass[UTF8,a4paper,openright,zihao=-4]{ctexbook}[2016/05/16]
 \@ifclasslater{ctexbook}{2016/05/16}{}{
@@ -307,13 +305,28 @@
   }%
 }
 \newcommand\ustc@foot{\hfil\ustc@header@font\thepage\hfil}
-\def\ps@plain{%
-  \def\@oddhead{\ustc@head}%
-  \def\@oddfoot{\ustc@foot}%
-  \def\@evenhead{\ustc@right@head}
-  \let\@evenfoot\@oddfoot
-  \let\@mkboth\markboth
-}
+\ifustc@pdf
+  \PassOptionsToClass{oneside}{book}
+  \def\ps@plain{%
+      \def\@oddhead{\ustc@head}%
+      \def\@oddfoot{\ustc@foot}%
+      \def\@evenhead{\ustc@right@head}
+      \let\@evenfoot\@oddfoot
+      \let\@mkboth\markboth
+    }
+  \def\cleardoublepage{\clearpage}   
+\else
+  \def\ps@plain{%
+    \def\@oddhead{\ustc@head}%
+    \def\@oddfoot{\ustc@foot}%
+    \def\@evenhead{\ustc@right@head}
+    \let\@evenfoot\@oddfoot
+    \let\@mkboth\markboth
+  }
+  \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+    \hbox{}\thispagestyle{empty}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\fi
+
 \@ifclasslater{ctexbook}{2016/09/21}{
   \def\chaptermark#1{%
     \markboth{%
@@ -339,8 +352,7 @@
 \pagestyle{plain}
 \def\ps@none{}
 \ctexset{chapter/pagestyle=none}
-\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
-  \hbox{}\thispagestyle{empty}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
 \renewcommand\frontmatter{%
   \cleardoublepage
   \@mainmatterfalse
@@ -516,12 +528,12 @@
   \ustc@titlelength=\csname str_count:N\endcsname{#1}%
   \begingroup
     \ifcase\ustc@titlelength
-    \or\or
-      \ziju{2}%
+    \or%\or
+%      \ziju{2}%
     \or
       \ziju{1}%
-    \or
-      \ziju{0.5}%
+%    \or
+%      \ziju{0.5}%
     \fi
     #1%
   \endgroup
@@ -538,7 +550,7 @@
     format      = \centering\CJKfamily{zhhei}\fontsize{16\bp@}{26.67\bp@}\selectfont,
     nameformat  = {},
     titleformat = \ustc@spacetitle,
-    number      = \thechapter,
+    number      = \chinese{chapter},
     aftername   = \hspace{\ccwd},
   },
 }
