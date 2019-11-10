@@ -987,14 +987,9 @@
   \SetAlCapSkip{6\bp@}
   \SetAlCapFnt{\small}
   \SetAlCapNameFnt{\small}
-  \ifustc@graduate
-    \SetAlCapNameSty{textbf}
-  \fi
   \SetAlgoCaptionSeparator{\unskip\hspace*{\ccwd}}
   \renewcommand\listofalgocfs{%
-    \ifustc@graduate
-      \cleardoublepage
-    \fi
+    \cleardoublepage
     \ustc@chapter{\listalgorithmcfname}%
     \@starttoc{loa}%
   }
