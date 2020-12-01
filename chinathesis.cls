@@ -36,9 +36,15 @@
 \DeclareOption{super}{\ustc@numericaltrue\ustc@supertrue}
 \DeclareOption{numbers}{\ustc@numericaltrue\ustc@superfalse}
 \DeclareOption{authoryear}{\ustc@numericalfalse}
+
+% 载入 \cls{ctexbook}。
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ExecuteOptions{doctor,chinese,print,super}
 \ProcessOptions\relax
+
+
+% \subsection{加载文档类和宏包}
+
 \ifustc@chinese
   \PassOptionsToClass{scheme=chinese}{ctexbook}
 \else
@@ -46,11 +52,15 @@
 \fi
 
 \PassOptionsToPackage{quiet}{xeCJK}
+% 载入 \cls{ctexbook} 文档类，注意要求为 2.4.9 或更高的版本。
 \LoadClass[UTF8,a4paper,openright,zihao=-4]{ctexbook}[2016/05/16]
 \@ifclasslater{ctexbook}{2016/05/16}{}{
   \ClassError{chinathesis}{%
     This template requires TeX Live\MessageBreak 2016 or later version}{}
 }
+
+% 建议在模板开始处载入全部宏包，不要轻易改变加载顺序。
+% \pkg{hyperref} 一般在最后加载。
 \RequirePackage{amsmath}
 \RequirePackage{unicode-math}
 \RequirePackage{geometry}
@@ -67,6 +77,11 @@
 \RequirePackage{natbib}
 \newcommand\ustc@strifeq{\csname str_if_eq_x:nnTF\endcsname}
 \newcommand\ustc@fontset{\csname g__ctex_fontset_tl\endcsname}
+
+
+% \subsection{字体}
+
+% 处理 \opt{fontset}
 \ustc@strifeq{\ustc@fontset}{fandol}{
   \setmainfont[
     Extension      = .otf,
@@ -205,16 +220,47 @@
     \fi
   }
 }
+
+% 目前最广泛使用的印刷的长度单位点（磅）通常指 PostScript point
+% \footnote{\url{https://en.wikipedia.org/wiki/Point_(typography)}}，
+% 在 \LaTeX{} 中是 bp，比默认的 pt 略大。
+% 这里保存起来可以节约编译时间。
 \newdimen\bp@
 \bp@=1bp
+
+% 下面设置字号。正文字号12bp，研究生行距20bp，本科生行距22bp；
+% 其他命令的行距按照相同的的比例设置，如表~\ref{tab:fontsize}。
+% \begin{table}[htb]
+%   \centering
+%   \caption{标准字体命令与字号、行距的对应}
+%   \label{tab:fontsize}
+%   \begin{tabular}{lllll}
+%     \toprule
+%     字体命令          & 字号 & bp   & 研究生行距 & 本科生行距 \\
+%     \midrule
+%     \cs{tiny}         & 小六 & 6.5  & 10.83      & 11.92      \\
+%     \cs{scriptsize}   & 六号 & 7.5  & 12.5       & 13.75      \\
+%     \cs{footnotesize} & 小五 & 9    & 15         & 16.5       \\
+%     \cs{small}        & 五号 & 10.5 & 17.5       & 19.25      \\
+%     \cs{normalsize}   & 小四 & 12   & 20         & 22         \\
+%     \cs{large}        & 小三 & 15   & 25         & 27.5       \\
+%     \cs{Large}        & 小二 & 18   & 30         & 33         \\
+%     \cs{LARGE}        & 二号 & 22   & 36.67      & 40.33      \\
+%     \cs{huge}         & 小一 & 24   & 40         & 44         \\
+%     \cs{Huge}         & 一号 & 26   & 43.33      & 47.67      \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
 \renewcommand\normalsize{%
-  \@setfontsize\normalsize{12\bp@}{24\bp@}%
+  \@setfontsize\normalsize{12\bp@}{24.46\bp@}%
   \abovedisplayskip 12\bp@ \@plus3\bp@ \@minus7\bp@
   \abovedisplayshortskip \z@ \@plus3\bp@
   \belowdisplayshortskip 6.5\bp@ \@plus3.5\bp@ \@minus3\bp@
   \belowdisplayskip \abovedisplayskip
   \let\@listi\@listI}
 \normalsize
+%
+% 注意第~\ref{sec:list} 节去掉了列表的间距，所以不再修改 \cs{@listi}。
 \renewcommand\small{%
   \@setfontsize\small{10.5\bp@}{17.5\bp@}%
   \abovedisplayskip 10.5\bp@ \@plus3\bp@ \@minus6\bp@
@@ -236,7 +282,27 @@
 \renewcommand\LARGE{\@setfontsize\LARGE{22\bp@}{36.67\bp@}}
 \renewcommand\huge{\@setfontsize\huge{24\bp@}{40\bp@}}
 \renewcommand\Huge{\@setfontsize\Huge{26\bp@}{43.33\bp@}}
+
+% 设置行距的倍数为 1。
 \linespread{1}\selectfont
+
+
+% \subsection{处理语言}
+
+% 由于 Unicode 的一些标点符号是中西文混用的：
+% \unicodechar{00B7}、
+% \unicodechar{2013}、
+% \unicodechar{2014}、
+% \unicodechar{2018}、
+% \unicodechar{2019}、
+% \unicodechar{201C}、
+% \unicodechar{201D}、
+% \unicodechar{2025}、
+% \unicodechar{2026}、
+% \unicodechar{2E3A}，
+% 所以要根据语言设置正确的字体。
+% \footnote{\url{https://github.com/CTeX-org/ctex-kit/issues/389}}
+% 所以要根据语言设置正确的字体。
 \newcommand\ustc@setchinese{%
   \xeCJKResetPunctClass
 }
@@ -253,6 +319,9 @@
     \ustc@setenglish
   \fi
 }
+
+% 这里设置了中英文的各种名字。
+
 \newcommand\ustc@universityname{长安大学}
 \newcommand\ustc@enuniversityname{Chang'an University}
 \ifustc@chinese
@@ -261,22 +330,39 @@
   \newcommand\ustc@acknowledgementsname{致谢}
   \newcommand\ustc@publicationsname{攻读学位期间取得的研究成果}
   \newcommand\ustc@notationname{符号说明}
+  \newcommand\ustc@summaryname{总结与展望}
 \else
   \renewcommand\figurename{Fig.}
   \newcommand\ustc@acknowledgementsname{Acknowledgements}
   \newcommand\ustc@publicationsname{Publications}
   \newcommand\ustc@notationname{Notation}
+  \newcommand\ustc@summaryname{Summary}
 \fi
+
+
+% \subsection{纸张和页面}
+% 使用 \pkg{geometry} 宏包设置纸张和页面。
+
+% 纸张：A4；
+
+% 页面设置：上、下 2.54 cm，左、右 3.17 cm，页眉 1.5 cm，页脚 1.75 cm。
+
+% 注意这里指的是页眉顶部到纸张顶部的距离为 1.5 cm，
+% 所以应该是 2.54cm - 0.8cm - 0.24cm = 1.5cm
+% 此处值为实际测量
+
 \geometry{
   paper      = a4paper,
   %vmargin    = 2.65cm, 
   top=26.5mm, 
-  bottom=27.2mm,
+  bottom=25.13mm,
   hmargin    = {3cm,2cm},
-  headheight = 1.61cm, 
-  headsep    = -0.49cm,
-  footskip   = 0.79cm,
+  headheight = 0.75cm, 
+  headsep    = 0.29cm,
+  footskip   = 1.00cm,
 }
+
+% 页眉页脚设计
 \newcommand\ustc@header@font{\fontsize{10.5\bp@}{12\bp@}\selectfont}
 \newcommand\ustc@header{\leftmark}
 \newcommand\ustc@right@header{长安大学%
@@ -292,15 +378,17 @@
 }
 \newcommand\ustc@head{%
   \vbox to\headheight{%
-    \hfil\ustc@header@font\ustc@header\strut\hfil
-    \hrule\@height 0.4\p@\@width\textwidth
+    \hfil\ustc@header@font\ustc@header\strut
+    \vspace{2.1mm}
+    \hrule\@height 0.4\p@\@width\textwidth\hfil
     \vfil
   }%
 }
 \newcommand\ustc@right@head{%
   \vbox to\headheight{%
-    \hfil\ustc@header@font\ustc@right@header\strut\hfil
-    \hrule\@height 0.4\p@\@width\textwidth
+    \hfil\ustc@header@font\ustc@right@header\strut
+    \vspace{2.1mm}
+    \hrule\@height 0.4\p@\@width\textwidth\hfil
     \vfil
   }%
 }
@@ -350,21 +438,29 @@
 }
 \let\sectionmark\@gobble
 \pagestyle{plain}
+
+% 每章第一页默认会设置特殊的 page style，我们希望它不改变页眉页脚，
+% 所以定义一个 |none|。
 \def\ps@none{}
 \ctexset{chapter/pagestyle=none}
 
+% 研究生要求从“中文摘要”开始页码用大写罗马数字，
 \renewcommand\frontmatter{%
   \cleardoublepage
   \@mainmatterfalse
   \pagenumbering{Roman}%
   \pagestyle{plain}%
 }
+
+
 \def\ustc@define@term#1#2{%
   \expandafter\gdef\csname #1\endcsname##1{%
     \expandafter\gdef\csname ustc@#1\endcsname{##1}%
   }%
   \csname #1\endcsname{#2}%
 }
+
+% 定义一些常量。
 \ustc@define@term{title}{论文题目}
 \ustc@define@term{classnumber}{TP396.4}
 \ustc@define@term{studentid}{2019124000}
@@ -398,7 +494,11 @@
     \newcommand\ustc@enthesisname{A dissertation for bachelor's degree}
   \fi
 \fi
+
+% 添加 PDF 书签，在 \pkg{hyperref} 载入后才有效。
 \newcommand\ustc@pdfbookmark{\@gobble}
+
+% 重定义 \env{titlepage} 环境，不修改页码。
 \renewenvironment{titlepage}{%
   \cleardoublepage
   \if@twocolumn
@@ -410,6 +510,14 @@
 }{%
   \if@restonecol\twocolumn \else \newpage \fi
 }
+
+% 中文封面：
+% 密级仿宋 14 磅；
+% 论文类型黑体 56 磅；
+% 论文题目黑体 26 磅加粗居中，单倍行距；
+% 作者姓名宋体 16 磅，单倍行距；
+% 注意这里的“单倍行距”的地方开启了“对齐到网格”，所以实际行距有所偏差，
+% 所以只能使用直尺测量。
 \usepackage{multirow}
 \newcommand\ustc@makezhtitle{%
   \ustc@setchinese
@@ -448,6 +556,8 @@
     Supervisors: \ustc@ensupervisor, \ustc@encosupervisor
   \fi
 }
+
+% 英文封面
 \newcommand\ustc@makeentitle{%
   \ustc@setenglish
   \begin{titlepage}%
@@ -471,13 +581,23 @@
   \end{titlepage}%
   \ustc@setdefaultlanguage
 }
+
+% 重新定义 \cs{maketitle}，调用 \cs{ustc@makezhtitle}, \cs{ustc@makeentitle}
+% 分别生成中、英文封面。
 \renewcommand\maketitle{%
+  \newgeometry{margin=2.54cm}%
   \pagenumbering{Alph}%
   \pagestyle{empty}%
   \ustc@makezhtitle
   \ustc@makeentitle
+  \restoregeometry
   \pagestyle{plain}%
 }
+
+
+% \subsection{原创性声明}
+
+% 定义原创性声明
 \newcommand\ustc@originality{%
   \fontsize{14\bp@}{31\bp@}\selectfont 本人声明：本人所呈交的学位论文是在导师的指导下,独立进行研究工作所取%
   得的成果。除论文中已经注明引用的内容外，对论文的研究做出重要贡献的个%
@@ -490,11 +610,15 @@
  后发表或使用学位论文或与该论文直接相关的学术论文或成果时，署名单位仍%
  然为\ustc@universityname{}。\par
   （保密的论文在解密后应遵守此规定）}
+%
+% 生成空的下划线
 \newcommand\ustc@underline[2][3.2cm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
+
 \newcommand\ustc@checkbox{%
   \makebox[\z@][l]{$\square$}%
   \raisebox{-0.2ex}{\hspace{0.1em}$\checkmark$}%
 }
+
 \newcommand\makestatement{%
   \begin{titlepage}%
     \ustc@pdfbookmark{原创性和授权使用声明}%
@@ -522,7 +646,16 @@
       \end{tabular}\par}%
   \end{titlepage}%
 }
+
+
+% \subsection{章节标题}
+
+% 标题最多允许使用五级。
 \setcounter{secnumdepth}{5}
+
+% 研究生规定章题为两字时中间空两字，三字时空一字，四字时空半字，四字以上不空。
+% 这里用 \LaTeX3 的 \cs{str\_count:N} 判断字数。
+% 注意，\pkg{stringstrings} 宏包会导致范数命令 \verb+\|+ 被修改。
 \newcount\ustc@titlelength
 \DeclareRobustCommand\ustc@spacetitle[1]{%
   \ustc@titlelength=\csname str_count:N\endcsname{#1}%
@@ -538,6 +671,8 @@
     #1%
   \endgroup
 }
+
+% 五级节标题和脚注需要使用带圈的数字，这里使用 \cs{ustc@circlefont} 
 \newcommand\ustc@textcircled[1]{%
   \ifnum\value{#1}<21\relax
     {\ustc@circlefont\symbol{\numexpr\value{#1} + "245F\relax}}%
@@ -545,9 +680,20 @@
     \ClassError{chinathesis}{Cannot display more than 10 footnotes}{}%
   \fi
 }
+
+% 用 \pkg{ctex} 的接口设置全部章节标题格式。
+
+% 各章标题：黑体 16 磅加粗居中，单倍行距，段前 24 磅，段后 18 磅，
+% 章序号与章名间空一字。
+
+% 由于 Word 模板中使用“单倍行距”，还“对齐到网格”，这在 TeX 中不容易实现。
+% 所以目前按照默认的行距。
+
+% 注意 \pkg{ctex} v2.4.3 以下版本的bug会导致章节标题前后的距离的实际值偏大。
+% 另外 \pkg{ctex} v2.2 前的beforeskip的符号有特殊意义。
 \ctexset{
   chapter = {
-    format      = \centering\CJKfamily{zhhei}\fontsize{16\bp@}{26.67\bp@}\selectfont,
+    format      = \centering\CJKfamily{zhhei}\fontsize{15.96\bp@}{26.67\bp@}\selectfont,
     nameformat  = {},
     titleformat = \ustc@spacetitle,
     number      = \chinese{chapter},
@@ -570,6 +716,9 @@
     },
   }
 }
+
+% 一级节标题：黑体 14 磅左顶格，单倍行距，段前 24 磅，段后 6 磅，
+% 序号与题名间空一字。
 \ctexset{
   section = {
     format     = \CJKfamily{zhhei}\fontsize{14\bp@}{23.33\bp@}\selectfont,
@@ -577,20 +726,27 @@
     beforeskip = 10\bp@,
     afterskip  = 10\bp@,
   },
+  %
+  % 二级节标题：黑体 12 磅，单倍行距，段前 12 磅，段后 6 磅，
+  % 序号与题名间空一字。
   subsection = {
-    format     = \CJKfamily{zhhei}\fontsize{12\bp@}{22\bp@}\selectfont,
+    format     = \CJKfamily{zhhei}\fontsize{12\bp@}{20\bp@}\selectfont,
     aftername  = \hspace{\ccwd},
     %indent     = 2\ccwd,
-    beforeskip = 3\bp@,
+    beforeskip = 8\bp@,
     afterskip  = 3\bp@,
   },
+  %
+  % 三级及以下节标题的格式没有具体规定，按照 Word 模板的格式：
+  % 使用黑体 12 磅，左缩进两字，行距 20 磅，段前段后 0 磅，序号与题名间空半字宽。
+  % 序号使用全宽括号
   subsubsection = {
-    format     = \CJKfamily{zhhei}\fontsize{12\bp@}{22\bp@}\selectfont,
-    number     = \arabic{subsubsection},
-    aftername  = .\hspace{0.5\ccwd},
-    %indent     = 2\ccwd,
-    beforeskip = 3\bp@,
-    afterskip  = 3\bp@,
+    format     = \CJKfamily{zhsong}\fontsize{12\bp@}{20\bp@}\selectfont,
+    number     = （\arabic{subsubsection}）,
+    aftername  = \hspace{0.5\ccwd},
+    indent     = 2\ccwd,
+    beforeskip = \z@,
+    afterskip  = \z@,
   },
   paragraph = {
     format     = \rmfamily\fontsize{12\bp@}{20\bp@}\selectfont,
@@ -611,6 +767,12 @@
     runin      = false,
   },
 }
+
+% 默认的 \cs{chapter*} 生成的章标题没有编号、不更改页眉，
+% 也不添加进目录或 PDF 书签。
+% 然而像摘要、目录、符号说明这样的章节，它们不需要编号、不加入目录，
+% 但是需要修改页眉，并且加入 PDF 标签。
+% 所以我们新定义 \cs{ustc@chapter} 用于处理这些章节。%
 \NewDocumentCommand\ustc@chapter{o m}{%
   \if@openright\cleardoublepage\else\clearpage\fi
   \IfValueTF{#1}{%
@@ -621,6 +783,12 @@
     \chaptermark{#2}%
   }%
   \chapter*{#2}}
+  %
+  %
+  % \subsection{摘要}
+  %
+  % 中文摘要环境。
+  % 判断 \cs{ustc@tocloaded} 是为了防止本科生未调整摘要位置时的目录页码缺失。
 \newenvironment{abstract}{%
   \ustc@setchinese
   \ustc@chapter{摘要}%
@@ -629,6 +797,8 @@
   \textbf{关键词}：\ustc@keywords
   \ustc@setdefaultlanguage
 }
+
+% 英文摘要环境
 \newenvironment{enabstract}{%
   \@openrightfalse
   \ustc@setenglish
@@ -639,23 +809,47 @@
   \textbf{Key Words}: \ustc@enkeywords
   \ustc@setdefaultlanguage
 }
+
+
+% \subsection{目录}
+
+% 研究生规定目录另面起；
 \renewcommand\tableofcontents{%
   \ustc@chapter{\contentsname}%
   \@starttoc{toc}%
 }
+
+% 下面用 \pkg{titletoc} 宏包设置目录内容的格式。
+% 先定义目录线：
 \newcommand\ustc@leaders{\titlerule*[9\bp@]{\textperiodcentered}}
+
+% 各章目录要求黑体 12 磅，单倍行距，段前 6 磅，段后 0 磅，两端对齐，
+% 页码右对齐，章序号与章名间空一字。
+% 但是 Word 模板中实际是行距 20 磅。
+
+% 另外 \pkg{ctex} 在章目录的序号后加 |\hspace{.3em}|，所以用 \cs{unskip} 修正。
 \titlecontents{chapter}
   [\z@]{\addvspace{6\bp@}\CJKfamily{zhhei}\fontsize{12\bp@}{24\bp@}\selectfont}
   {\contentspush{\thecontentslabel\unskip\hspace{\ccwd}}}{}
   {\fontsize{12\bp@}{24\bp@}\selectfont\ustc@leaders\contentspage}
+%
+% 一级节标题目录要求宋体 12 磅，单倍行距，左缩进一字，段前 6 磅，段后 0 磅，
+% 两端对齐，页码右对齐，序号与题名间空一字。
+% Word 模板中实际是行距 20 磅，段前 0 磅。
 \titlecontents{section}
   [\ccwd]{\fontsize{12\bp@}{24\bp@}\selectfont}
   {\contentspush{\thecontentslabel\hspace{\ccwd}}}{}
   {\fontsize{12\bp@}{24\bp@}\selectfont\ustc@leaders\contentspage}
+%
+% 二级节标题目录要求宋体 12 磅，单倍行距，左缩进两字，段前 6 磅，段后 0 磅，
+% 两端对齐，页码右对齐，序号与题名间空一字。
+% Word 模板中实际是行距 20 磅，段前 0 磅。
 \titlecontents{subsection}
   [2\ccwd]{\fontsize{12\bp@}{24\bp@}\selectfont}
   {\contentspush{\thecontentslabel\hspace{\ccwd}}}{}
   {\fontsize{12\bp@}{24\bp@}\selectfont\ustc@leaders\contentspage}
+
+% 研究生要求图、表的清单须另页起。
 \renewcommand\listoffigures{%
   \ustc@chapter{\listfigurename}%
   \@starttoc{lof}%
@@ -672,6 +866,12 @@
   [2.3em]{\normalsize}
   {\contentslabel{2.3em}}{}
   {\ustc@leaders\contentspage}
+  %
+  %
+  % \subsection{符号说明}
+  %
+  % 研究生规定符号说明另页起，标题字体字号等同论文正文，
+  % 《撰写手册》第 9 页 1.10(2) 还规定“符号说明不加页码”。
 \newenvironment{notation}{%
   \ustc@chapter{\ustc@notationname}%
 }{}%
@@ -690,10 +890,27 @@
 }{%
   \endlist
 }
-\setlength{\parskip}{0\p@ \@plus .2\p@}
+
+% \subsection{正文}
+
+% \cs{sloppy} 可以减少“overfull boxes”。
+\sloppy
+
+% 禁止扩大段间距。（\href{https://github.com/ustctug/ustcthesis/issues/209}{
+%   ustctug/ustcthesis\#209}）
+\raggedbottom
+
+% 段间距 0 磅。
+\setlength{\parskip}{\z@}
+
+% 在 \opt{scheme=plain} 时也首段缩进。
 \let\@afterindentfalse\@afterindenttrue
 \@afterindenttrue
+
+% URL 的字体设为保持原样。
 \urlstyle{same}
+
+% 使用 \pkg{xurl} 宏包的方法，增加 URL 可断行的位置。
 \def\UrlBreaks{%
   \do\/%
   \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l%
@@ -703,15 +920,32 @@
   \do0\do1\do2\do3\do4\do5\do6\do7\do8\do9\do=\do/\do.\do:%
   \do\*\do\-\do\~\do\'\do\"\do\-}
 \Urlmuskip=0mu plus 0.1mu
+
+% 脚注用带圈的数字：
 \renewcommand\thefootnote{\ustc@textcircled{footnote}}
+
+% LaTeX 默认脚注按章计数，即每章的开始才重置脚注计数器；我们修改为按页计数。
+% 简单的|\@addtoreset{footnote}{page}|并不可靠，
+% \footnote{\url{https://texfaq.org/FAQ-footnpp.html}}
+% 所以我们使用 \pkg{footmisc} 宏包。
+
+% 脚注线长为版心宽度的四分之一：
 \renewcommand\footnoterule{%
   \kern-3\p@
   \hrule\@width.25\textwidth
   \kern2.6\p@}
+  %
+  % 注文缩进两字：
 \renewcommand\@makefntext[1]{%
   \parindent 2\ccwd\relax
   \noindent
   \hb@xt@2\ccwd{\hss\@makefnmark}#1}
+
+
+% \subsection{列表}
+% \label{sec:list}
+
+% 调整列表中各项之间过大的间距。
 \setlength\partopsep{\z@}
 \newcommand\ustc@nolistsep{%
   \parsep 0\p@ \@plus.2\p@
@@ -730,6 +964,11 @@
               \labelwidth\leftmarginiii
               \advance\labelwidth-\labelsep
               \ustc@nolistsep}
+
+% \subsection{浮动体}
+
+% \LaTeX{} 对放置浮动体的要求比较强，这里按照 UK TeX FAQ 的建议
+% \footnote{\url{https://texfaq.org/FAQ-floats}} 对其适当放宽。
 \renewcommand\topfraction{.85}
 \renewcommand\bottomfraction{.7}
 \renewcommand\textfraction{.15}
@@ -740,8 +979,23 @@
 \setcounter{bottomnumber}{9}
 \setcounter{totalnumber}{20}
 \setcounter{dbltopnumber}{9}
+
+% 修改默认的浮动体描述符为 |htb|。
 \def\fps@figure{htb}
 \def\fps@table{htb}
+
+% 用 \pkg{caption} 宏包设置图、表的格式：
+
+% 图号、图题置于图的下方，宋体 10.5 磅居中，单倍行距，段前 6 磅，段后 12 磅，
+% 图号与图题文字之间空一字，图号、图题加粗。
+% 图注位于图的下方，左缩进两字，续行悬挂缩进左对齐，两端对齐。
+
+% 表号、表题置于表的上方，宋体 10.5 磅居中，单倍行距，段前 6 磅，段后 6 磅，
+% 表号与表题文字之间空一字，表号、表题加粗。
+% 表注左缩进两字，续行悬挂缩进左对齐，两端对齐。
+\setlength{\floatsep}{6\bp@}
+\setlength{\textfloatsep}{6\bp@}
+\setlength{\intextsep}{6\bp@}
 \DeclareCaptionLabelSeparator{zhspace}{\hspace{\ccwd}}
 \captionsetup{
   format    = hang,
@@ -758,6 +1012,10 @@
   aboveskip = 6\bp@,
   belowskip = 6\bp@,
 }
+
+% 新定义了 \cs{note} 来生成图表的附注。
+% 如果用 \cs{caption} 生成图表的附注会导致图表的序号有误；
+% 如果用 \cs{bicaption} 会导致表注无法置于表后，而且对齐方式不对。
 \newcommand\note[1]{%
   \begingroup
   \captionsetup{
@@ -770,15 +1028,25 @@
   \caption*{#1}%
   \endgroup
 }
+
+% \subsection{数学符号}
+
+% 根据中文的数学排印习惯进行设置：
+
+% 省略号一律居中，所以 \cs{ldots} 不再居于底部。
 \ifustc@chinese
   \def\mathellipsis{\cdots}
 \fi
+
+% 小于等于号、大于等于号要使用倾斜的字形。
 \protected\def\le{\leqslant}
 \protected\def\ge{\geqslant}
 \AtBeginDocument{%
   \renewcommand\leq{\leqslant}%
   \renewcommand\geq{\geqslant}%
 }
+
+% 积分号的上下限默认置于上下两侧。
 \removenolimits{%
   \int\iint\iiint\iiiint\oint\oiint\oiiint
   \intclockwise\varointclockwise\ointctrclockwise\sumint
@@ -786,21 +1054,36 @@
   \scpolint\npolint\pointint\sqint\intlarhk\intx
   \intcap\intcup\upint\lowint
 }
+
+% 实部、虚部操作符使用罗马体 $\mathrm{Re}$、$\mathrm{Im}$ 而不是 fraktur 体
+% $\Re$、$\Im$。
 \AtBeginDocument{%
   \renewcommand\Re{\operatorname{Re}}%
   \renewcommand\Im{\operatorname{Im}}%
 }
+
+% \cs{nabla} 使用粗正体。
 \AtBeginDocument{%
   \renewcommand\nabla{\mbfnabla}%
 }
+
 \newcommand\bm{\symbf}
 \renewcommand\boldsymbol{\symbf}
+
+% 兼容 \pkg{amssymb} 中的命令。
 \newcommand\square{\mdlgwhtsquare}
+
+% 提供一些方便的命令：
 \newcommand\upe{\symup{e}}
 \newcommand\upi{\symup{i}}
 \newcommand\dif{\mathop{}\!\mathrm{d}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+
+
+% \subsection{参考文献}
+
+% 定义几种引用文献的标注法。
 \newcommand\bibstyle@super{\bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
 \newcommand\bibstyle@numbers{\bibpunct{[}{]}{,}{n}{,}{,}}
 \newcommand\bibstyle@authoryear{\bibpunct{(}{)}{;}{a}{,}{,}}
@@ -816,6 +1099,9 @@
   \bibliographystyle{chinathesis-authoryear}
 \fi
 \newcommand\ustc@patchcmd{\csname ctex_patch_cmd:Nnn\endcsname}
+
+% 下面修改引用标注的格式，主要是将页码写在上标位置。
+% Numerical 模式的 \cs{citet} 的页码：
 \ustc@patchcmd{\NAT@citexnum}{%
   \@ifnum{\NAT@ctype=\z@}{%
     \if*#2*\else\NAT@cmt#2\fi
@@ -827,6 +1113,8 @@
     \if*#2*\else\textsuperscript{#2}\fi
   }{}%
 }
+
+% Numerical 模式的 \cs{citep} 的页码：
 \renewcommand\NAT@citesuper[3]{\ifNAT@swa
 \if*#2*\else#2\NAT@spacechar\fi
 \unskip\kern\p@\textsuperscript{\NAT@@open#1\NAT@@close\if*#3*\else#3\fi}%
@@ -834,6 +1122,8 @@
 \renewcommand\NAT@citenum%
     [3]{\ifNAT@swa\NAT@@open\if*#2*\else#2\NAT@spacechar\fi
         #1\NAT@@close\if*#3*\else\textsuperscript{#3}\fi\else#1\fi\endgroup}
+        %
+        % Author-year 模式的 \cs{citet} 的页码：
 \ustc@patchcmd{\NAT@citex}{%
   \if*#2*\else\NAT@cmt#2\fi
   \if\relax\NAT@date\relax\else\NAT@@close\fi
@@ -841,9 +1131,15 @@
   \if\relax\NAT@date\relax\else\NAT@@close\fi
   \if*#2*\else\textsuperscript{#2}\fi
 }
+
+% Author-year 模式的 \cs{citep} 的页码：
 \renewcommand\NAT@cite%
     [3]{\ifNAT@swa\NAT@@open\if*#2*\else#2\NAT@spacechar\fi
         #1\NAT@@close\if*#3*\else\textsuperscript{#3}\fi\else#1\fi\endgroup}
+        %
+        % 在顺序编码制下，\pkg{natbib} 只有在三个以上连续文献引用才会使用连接号，
+        % 这里修改为允许两个引用使用连接号。
+        % \footnote{\url{https://tex.stackexchange.com/a/86991/82731}}
 \ustc@patchcmd{\NAT@citexnum}{%
   \ifx\NAT@last@yr\relax
     \def@NAT@last@yr{\@citea}%
@@ -853,21 +1149,47 @@
 }{%
   \def@NAT@last@yr{-\NAT@penalty}%
 }
+
 \DeclareRobustCommand\inlinecite{\@inlinecite}
 \def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
+
+% 参考文献列表格式：宋体 10.5 磅，行距 20 磅，续行缩进两字，左对齐。
+% 本科生依然是小四宋体。
 \renewcommand\bibfont{\fontsize{10.5\bp@}{20\bp@}\selectfont}
 \setlength{\bibsep}{0\p@ \@plus.2\p@}
 \setlength{\bibhang}{2\ccwd}
 \renewcommand\@biblabel[1]{[#1]\hfill}
+
+% 为了将参考文献加入目录和 pdf 书签，重新定义 \pkg{natbib} 的 \cmd{bibsection}
 \renewcommand\bibsection{%
   \@mainmatterfalse
   \chapter{\bibname}%
   \@mainmattertrue
 }
+
+% BibTeX 生成参考文献表的样式在 \file{bst} 文件中提供。
+
+
+% \subsection{附录}
+
+% 定义了一个满足要求的总结环境：
+\newenvironment{summary}{%
+  \chapter{\ustc@summaryname}%
+}{}
+% 定义了一个满足要求的致谢环境：
 \newenvironment{acknowledgements}{%
   \chapter{\ustc@acknowledgementsname}%
 }{}
+% 发表成果环境：
 \newenvironment{publications}{\chapter{\ustc@publicationsname}}{}
+
+
+% \subsection{其他宏包的设置}
+
+% 这些宏包并非格式要求，但是为了方便同学们使用，在这里进行简单设置。
+
+
+% \subsubsection{\pkg{hyperref} 宏包}
 \newcommand\ustc@atendpackage{\csname ctex_at_end_package:nn\endcsname}
 \ustc@atendpackage{hyperref}{
   \hypersetup{
@@ -876,6 +1198,8 @@
     bookmarksopenlevel = 1,
     linktoc            = all,
   }
+  %
+  % 如果为 \opt{pdf} 样式，设置 hyperlink 颜色
   \ifustc@pdf
     \hypersetup{
       %colorlinks = true,
@@ -885,6 +1209,8 @@
   \else
     \hypersetup{hidelinks}
   \fi
+  %
+  % 填写 PDF 元信息
   \AtBeginDocument{%
     \ifustc@chinese
       \hypersetup{
@@ -898,16 +1224,34 @@
       }%
     \fi
   }
+  %
+  % 添加 PDF 书签
+  %
   \newcounter{ustc@bookmarknumber}
   \renewcommand\ustc@pdfbookmark[1]{%
     \phantomsection
     \stepcounter{ustc@bookmarknumber}%
     \pdfbookmark[0]{#1}{ustcchapter.\theustc@bookmarknumber}%
   }
+  %
+  % 在 PDF 字符串中去掉换行，以减少 \pkg{hyperref} 的警告信息。
   \pdfstringdefDisableCommands{
     \let\\\@empty
     \let\hspace\@gobble
   }
+  %
+  % \pkg{hyperref} 与 \pkg{unicode-math} 存在一些兼容性问题，见
+  % \href{https://github.com/ustctug/ustcthesis/issues/223}{%
+  %   ustctug/ustcthesis\#223}，
+  % \href{https://github.com/ho-tex/hyperref/pull/90}{ho-tex/hyperref\#90} 和
+  % \href{https://github.com/ustctug/ustcthesis/issues/235}{%
+  %   ustctug/ustcthesis/\#235}。
+  \@ifpackagelater{hyperref}{2019/04/27}{}{%
+    \g@addto@macro\psdmapshortnames{\let\mu\textmu}%
+  }
+  %
+  % 设置中文的 \cs{autoref}。
+  % \footnote{\url{https://tex.stackexchange.com/a/66150/82731}}
   \ifustc@chinese
     \def\equationautorefname~#1\null{公式~(#1)\null}
     \def\footnoteautorefname{脚注}
@@ -926,6 +1270,10 @@
     \def\HyRef@autopageref#1{\hyperref[{#1}]{第~\pageref*{#1} 页}}
   \fi
 }
+
+
+% \subsubsection{\pkg{amsthm} 宏包}
+
 \ustc@atendpackage{amsthm}{
   \newtheoremstyle{ustcplain}
     {}{}
@@ -933,6 +1281,7 @@
     {\bfseries}{}
     {\ccwd}{}
   \theoremstyle{ustcplain}
+  % 定义新的定理
   \ifustc@chinese
     \newcommand\ustc@assertionname{断言}
     \newcommand\ustc@axiomname{公理}
@@ -965,6 +1314,9 @@
   \newtheorem{definition}             {\ustc@definitionname}  [chapter]
   \newtheorem{example}                {\ustc@examplename}     [chapter]
   \newtheorem*{remark}                {\ustc@remarkname}
+  % \pkg{amsthm} 单独定义了 proof 环境，这里重新定义以满足格式要求。
+  % 原本模仿 \pkg{amsthm} 写成 |\item[\hskip\labelsep\hskip2\ccwd #1\hskip\ccwd]|，
+  % 但是却会多出一些间隙。
   \renewenvironment{proof}[1][\proofname]{\par
     \pushQED{\qed}%
     \normalfont \topsep6\p@\@plus6\p@\relax
@@ -977,17 +1329,28 @@
   }
   \renewcommand\proofname\ustc@proofname
 }
+
+
+% \subsubsection{\pkg{algorithm2e} 宏包}
+
+% 按章节编号。
 \PassOptionsToPackage{algochapter}{algorithm2e}
+
 \ustc@atendpackage{algorithm2e}{
   \ifustc@chinese
     \SetAlgorithmName{算法}{算法}{算法清单}
   \else
     \SetAlgorithmName{Algorithm}{Algorithm}{List of Algorithms}
   \fi
+  %
+  % 设置算法环境的格式。
   \SetAlCapSkip{6\bp@}
   \SetAlCapFnt{\small}
   \SetAlCapNameFnt{\small}
+  \SetAlCapNameSty{textbf}
   \SetAlgoCaptionSeparator{\unskip\hspace*{\ccwd}}
+  %
+  % 设置算法清单的格式
   \renewcommand\listofalgocfs{%
     \cleardoublepage
     \ustc@chapter{\listalgorithmcfname}%
@@ -999,6 +1362,9 @@
     {\ustc@leaders\contentspage}
   \contentsuse{algocf}{loa}
 }
+
+% \subsubsection{\pkg{nomencl} 宏包}
+
 \ustc@atendpackage{nomencl}{
   \let\nomname\ustc@notationname
   \def\thenomenclature{%
@@ -1015,6 +1381,10 @@
     \nompostamble
   }
 }
+
+
+% \subsubsection{\pkg{siunitx} 宏包}
+
 \ustc@atendpackage{siunitx}{
   \sisetup{
     group-minimum-digits = 4,
@@ -1029,3 +1399,13 @@
     }
   \fi
 }
+
+% \subsubsection{\pkg{chapterbib} 宏包}
+
+% \AtEndOfPackageFile*{chapterbib}{
+%   \renewcommand\bibsection{%
+%     \ctexset{section/numbering=false}%
+%     \section{\bibname}%
+%     \ctexset{section/numbering=true}%
+%   }
+% }
