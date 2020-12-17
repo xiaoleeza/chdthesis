@@ -58,3 +58,7 @@ make clean      # 删除编译过程中生成的临时文件
 
 5. 欢迎提出修改意见。
 6. 本声明摘自nudtpaper-2.2.pdf。
+
+#### qq交流群
+长安大学CHD LaTeX交流群 78437328
+LaTeX技术交流 1 群 LaTeX技术交流 1 群
