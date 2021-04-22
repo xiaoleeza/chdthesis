@@ -21,14 +21,16 @@
   [2018/10/27 v1.0 A template framework for Chinese dissertations]
 \newif\ifustc@doctor
 \newif\ifustc@master
+\newif\ifustc@profmaster
 \newif\ifustc@bachelor
 \newif\ifustc@chinese
 \newif\ifustc@numerical
 \newif\ifustc@super
 \newif\ifustc@pdf
-\DeclareOption{doctor}{\ustc@doctortrue\ustc@masterfalse\ustc@bachelorfalse}
-\DeclareOption{master}{\ustc@doctorfalse\ustc@mastertrue\ustc@bachelorfalse}
-\DeclareOption{bachelor}{\ustc@doctorfalse\ustc@masterfalse\ustc@bachelortrue}
+\DeclareOption{doctor}{\ustc@doctortrue\ustc@masterfalse\ustc@profmasterfalse\ustc@bachelorfalse}
+\DeclareOption{master}{\ustc@doctorfalse\ustc@mastertrue\ustc@profmasterfalse\ustc@bachelorfalse}
+\DeclareOption{profmaster}{\ustc@doctorfalse\ustc@masterfalse\ustc@profmastertrue\ustc@bachelorfalse}
+\DeclareOption{bachelor}{\ustc@doctorfalse\ustc@masterfalse\ustc@profmasterfalse\ustc@bachelortrue}
 \DeclareOption{chinese}{\ustc@chinesetrue}
 \DeclareOption{english}{\ustc@chinesefalse}
 \DeclareOption{print}{\ustc@pdffalse}
@@ -372,7 +374,11 @@
   \ifustc@master
     硕士学位论文
   \else
-    学士学位论文
+    \ifustc@profmaster
+    硕士学位论文
+    \else
+      学士学位论文
+    \fi%
   \fi%
 \fi%
 }
@@ -483,16 +489,23 @@
 \ustc@define@term{ensecretlevel}{}
 \ustc@define@term{keywords}{}
 \ustc@define@term{enkeywords}{}
+\newcommand\@sbf[1]{\renewcommand{\CJKglue}{\hskip 0.79cm}\scalebox{0.8}[1]{#1}}
+\newcommand\@sbfp[1]{\scalebox{0.8}[1]{#1}}
 \ifustc@doctor
-  \newcommand\ustc@thesisname{\CJKfamily{cusong}博\hspace{0.62cm}士\hspace{0.62cm}学\hspace{0.62cm}位\hspace{0.62cm}论\hspace{0.62cm}文}
+  \newcommand\ustc@thesisname{\CJKfamily{cusong}\@sbf{博士学位论文}}
   \newcommand\ustc@enthesisname{A Dissertation Submitted for the Degree of Doctor}
 \else
   \ifustc@master
-    \newcommand\ustc@thesisname{\CJKfamily{cusong}硕\hspace{0.62cm}士\hspace{0.62cm}学\hspace{0.62cm}位\hspace{0.62cm}论\hspace{0.62cm}文}
-    \newcommand\ustc@enthesisname{A Dissertation Submitted for the Degree of Master}
+    \newcommand\ustc@thesisname{\CJKfamily{cusong}\@sbf{硕士学位论文}}
+    \newcommand\ustc@enthesisname{A Thesis Submitted for the Degree of Master}
   \else
-    \newcommand\ustc@thesisname{学士学位论文}
-    \newcommand\ustc@enthesisname{A dissertation for bachelor's degree}
+    \ifustc@profmaster
+      \newcommand\ustc@thesisname{\CJKfamily{cusong}\@sbfp{专业硕士学位论文}}
+      \newcommand\ustc@enthesisname{A Thesis Submitted for the Degree of Master}
+    \else
+      \newcommand\ustc@thesisname{学士学位论文}
+      \newcommand\ustc@enthesisname{A dissertation for bachelor's degree}
+    \fi
   \fi
 \fi
 
@@ -525,21 +538,22 @@
   \begin{titlepage}%
     \ustc@pdfbookmark{封面}%
     {\centering\fontsize{14\bp@}{31\bp@}\selectfont
-    \begin{tabular}{p{13.17cm}r}
-    分类号:  \ustc@classnumber & \multirow{2}[0]{*}{\includegraphics[height=1.9cm]{figures/chdredlogo.eps}} \\
+    \hspace{3mm}
+    \begin{tabular}{p{12.42cm}r}
+    分类号:  \ustc@classnumber & \multirow{2}{18mm}[-1.8mm]{\includegraphics[height=1.78cm]{figures/chdredlogo.eps}} \\
     10710-\ustc@studentid &  \\
     \end{tabular}}\\
     \vskip 1.1cm%
    \centering\includegraphics[width=5.41cm]{figures/name.jpg} \\
-    \vskip 0.41cm%
+    \vskip 0.38cm%
     {\fontsize{45\bp@}{45\bp@}\selectfont
       \ustc@thesisname\par}%
     \vskip -0.11cm%
     \parbox[t][3.5cm][c]{\textwidth}{%
-      \centering\fontsize{18\bp@}{18\bp@}\selectfont
+      \centering\fontsize{22\bp@}{22\bp@}\selectfont
       \ustc@title\par}\par
       {\fontsize{14\bp@}{31\bp@}\selectfont\ustc@author}\\
-    \vskip 4.03cm%
+    \vskip 3.4cm%
     {\fontsize{14\bp@}{31\bp@}\selectfont
       \begin{tabular}{lp{8em}rp{8em}}
      导师姓名职称 & \multicolumn{3}{c}{\ustc@supervisor} \\\cline{2-4}    
