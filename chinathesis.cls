@@ -332,7 +332,7 @@
   \newcommand\ustc@acknowledgementsname{致谢}
   \newcommand\ustc@publicationsname{攻读学位期间取得的研究成果}
   \newcommand\ustc@notationname{符号说明}
-  \newcommand\ustc@summaryname{总结与展望}
+  \newcommand\ustc@summaryname{结论与展望}
 \else
   \renewcommand\figurename{Fig.}
   \newcommand\ustc@acknowledgementsname{Acknowledgements}
@@ -1189,7 +1189,9 @@
 
 % 定义了一个满足要求的总结环境：
 \newenvironment{summary}{%
-  \chapter{\ustc@summaryname}%
+  \chapter*{\ustc@summaryname}%
+  \addcontentsline{toc}{chapter}{\ustc@summaryname}
+  \markboth{\ustc@summaryname}{\ustc@summaryname}
 }{}
 % 定义了一个满足要求的致谢环境：
 \newenvironment{acknowledgements}{%

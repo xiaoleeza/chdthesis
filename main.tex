@@ -2,7 +2,7 @@
 % !TeX program = xelatex
 % !TeX spellcheck = en_US
 
-\documentclass[profmaster,pdf]{chinathesis}
+\documentclass[profmaster,print]{chinathesis}
 % doctor|master|bachelor [chinese|english] [print|pdf] [super|numbers|authoryear]
 
 \title{论文题目}
@@ -29,6 +29,7 @@
 
 
 % 加载宏包和配置
+\usepackage{hyperref}
 \usepackage{graphicx}
 \graphicspath{{figures/}}
 \usepackage{booktabs}
@@ -73,6 +74,7 @@
 \input{chapters/floats}
 \input{chapters/math}
 \input{chapters/citations}
+\input{chapters/summary}
 \bibliography{bibs/refs} % 参考文献
 
 % 附录
