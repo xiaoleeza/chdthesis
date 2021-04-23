@@ -15,7 +15,7 @@
 %%    https://www.latex-project.org/lppl.txt
 %% and version 1.3c or later is part of all distributions of LaTeX
 %% version 2005/12/01 or later.
-%% 
+%% TODO: 修改打印版封皮，修改表格字号
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{chinathesis}
   [2018/10/27 v1.0 A template framework for Chinese dissertations]
@@ -600,7 +600,11 @@
 % 重新定义 \cs{maketitle}，调用 \cs{ustc@makezhtitle}, \cs{ustc@makeentitle}
 % 分别生成中、英文封面。
 \renewcommand\maketitle{%
-  \newgeometry{margin=2.54cm}%
+  \ifustc@pdf%将打印版和pdf版封面边距分别设置
+    \newgeometry{margin=2.54cm}%
+    \else
+    \newgeometry{left=3cm,right=2cm}%
+  \fi
   \pagenumbering{Alph}%
   \pagestyle{empty}%
   \ustc@makezhtitle
