@@ -458,11 +458,6 @@
   \pagestyle{plain}%
 }
 
-\usepackage{etoolbox}
-\usepackage{lipsum}
-\if@mainmatter
-  \AtBeginEnvironment{tabular}{\zihao{5}}  % 修改表格内字号
-
 \def\ustc@define@term#1#2{%
   \expandafter\gdef\csname #1\endcsname##1{%
     \expandafter\gdef\csname ustc@#1\endcsname{##1}%
