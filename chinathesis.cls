@@ -665,7 +665,6 @@
   \end{titlepage}%
 }
 
-
 % \subsection{章节标题}
 
 % 标题最多允许使用五级。
@@ -940,7 +939,7 @@
 \Urlmuskip=0mu plus 0.1mu
 
 % 脚注用带圈的数字：
-\renewcommand\thefootnote{\ustc@textcircled{footnote}}
+% \renewcommand\thefootnote{\ustc@textcircled{footnote}}
 
 % LaTeX 默认脚注按章计数，即每章的开始才重置脚注计数器；我们修改为按页计数。
 % 简单的|\@addtoreset{footnote}{page}|并不可靠，
@@ -957,8 +956,16 @@
 \renewcommand\@makefntext[1]{%
   \parindent 2\ccwd\relax
   \noindent
-  \hb@xt@2\ccwd{\hss\@makefnmark}#1}
+  \hb@xt@5\ccwd{\hss\@makefnmark}#1}
 
+  \usepackage{xpatch}
+  % 取消上标形式
+  \xpatchcmd\@makefntext
+    {{\hss\@makefnmark}}
+    {{\hss\@makefnmark@nosuperscript}\space}
+    {}{\fail}
+  % 定义规范形式
+  \def\@makefnmark@nosuperscript{\lower 0ex \hbox{注\normalfont\@thefnmark：}}
 
 % \subsection{列表}
 % \label{sec:list}
