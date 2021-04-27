@@ -2,7 +2,7 @@
 % !TeX program = xelatex
 % !TeX spellcheck = en_US
 
-\documentclass[doctor,print]{chinathesis}
+\documentclass[doctor,pdf]{chinathesis}
 % doctor|master|bachelor [chinese|english] [print|pdf] [super|numbers|authoryear]
 
 \title{论文题目}
@@ -37,8 +37,6 @@
 \usepackage{siunitx}
 \usepackage{amsthm}
 \usepackage{pdfpages}
-\usepackage{etoolbox}
-\usepackage{lipsum}
 
 
 \DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
@@ -70,7 +68,7 @@
 % 主要符号表
 \input{chapters/notation}
 
-\AtBeginEnvironment{tabular}{\zihao{5}}  % 设定表格字号
+
 \mainmatter
 \input{chapters/intro}
 \input{chapters/structure}

@@ -450,11 +450,25 @@
 \def\ps@none{}
 \ctexset{chapter/pagestyle=none}
 
-% 研究生要求从“中文摘要”开始页码用大写罗马数字，
+\usepackage{fancyhdr}
+\fancypagestyle{myfancy}{
+\fancyhf{}
+\fancyfoot[C]{ \thepage}
+\renewcommand{\headrulewidth}{0pt}
+}
+% 正文之前无页眉
 \renewcommand\frontmatter{%
   \cleardoublepage
   \@mainmatterfalse
   \pagenumbering{Roman}%
+  \pagestyle{myfancy}%
+}
+
+\renewcommand\mainmatter{%
+  \cleardoublepage
+  \@mainmattertrue
+  \AtBeginEnvironment{tabular}{\zihao{5}}  % 设定表格字号
+  \pagenumbering{arabic}%
   \pagestyle{plain}%
 }
 
@@ -808,7 +822,7 @@
   % 判断 \cs{ustc@tocloaded} 是为了防止本科生未调整摘要位置时的目录页码缺失。
 \newenvironment{abstract}{%
   \ustc@setchinese
-  \ustc@chapter{摘要}%
+  \ustc@chapter{摘\hspace{2\ccwd}要}%
 }{
   \par\null\par\noindent\hangindent=4\ccwd\relax
   \textbf{关键词}：\ustc@keywords
