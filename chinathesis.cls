@@ -689,7 +689,7 @@
   \endgroup
 }
 
-% 五级节标题和脚注需要使用带圈的数字，这里使用 \cs{ustc@circlefont} 
+% 五级节标题需要使用带圈的数字，这里使用 \cs{ustc@circlefont} 
 \newcommand\ustc@textcircled[1]{%
   \ifnum\value{#1}<21\relax
     {\ustc@circlefont\symbol{\numexpr\value{#1} + "245F\relax}}%
@@ -938,9 +938,6 @@
   \do\*\do\-\do\~\do\'\do\"\do\-}
 \Urlmuskip=0mu plus 0.1mu
 
-% 脚注用带圈的数字：
-% \renewcommand\thefootnote{\ustc@textcircled{footnote}}
-
 % LaTeX 默认脚注按章计数，即每章的开始才重置脚注计数器；我们修改为按页计数。
 % 简单的|\@addtoreset{footnote}{page}|并不可靠，
 % \footnote{\url{https://texfaq.org/FAQ-footnpp.html}}
@@ -959,7 +956,7 @@
   \hb@xt@5\ccwd{\hss\@makefnmark}#1}
 
   \usepackage{xpatch}
-  % 取消上标形式
+  % 取消上标形式，参考https://zhuanlan.zhihu.com/p/74515148
   \xpatchcmd\@makefntext
     {{\hss\@makefnmark}}
     {{\hss\@makefnmark@nosuperscript}\space}
