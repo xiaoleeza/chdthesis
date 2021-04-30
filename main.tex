@@ -3,18 +3,21 @@
 % !TeX spellcheck = en_US
 
 \documentclass[doctor,pdf]{chinathesis}
-% doctor|master|bachelor [chinese|english] [print|pdf] [super|numbers|authoryear]
+% [doctor|master|bachelor] 选择学位模板，默认博士
+% [chinese|english] 选择中英文模板，默认中文
+% [print|pdf] 选择版式，默认为print
+% [defense] 封面下方加入答辩委员会人员
 
 \title{论文题目}
 \classnumber{TP396.4} % 中图分类号，根据研究方向填写
 \studentid{2019124007}%学号
 \author{作者姓名} % 姓名
-\major{信息与通信工程} % 专业
+\professionaltype{学位类别} % 学位类别
+\major{专业名称} % 专业，参考以往，专硕也只填写了专业名称
 \supervisor{某某\ 教授} % 导师
 % \cosupervisor{}
 \submissiondate{2019年5月20日}  % 提交日期，注释后为今日
 \defensedate{2019年5月30日}  % 答辩日期，注释后为今日
-\professionaltype{专业学位类型}
 % \secretlevel{秘密}        % 绝密|机密|秘密，注释本行则不保密
 % \secretyear{20}           % 保密年限
 
@@ -22,7 +25,7 @@
 \enauthor{Wang Dazhi}
 \enmajor{Information and Communication Engineering}
 \ensupervisor{Prof. Zhang Dahai}
-% \encosupervisor{}
+% \encosupervisor{Prof. Zhang Dahai} % TODO: 增加
 % \endate{May 1, 2017}      % Today if commented
 % \enprofessionaltype{Professional degree type}
 % \ensecretlevel{Secret}    % Top secret|Highly secret|Secret
@@ -51,7 +54,7 @@
 
 \begin{document}
 
-\maketitle % 中英文封面
+\maketitle % 中英文封面，封面内容位置大致和模板一致即可，不必深究，大部分人彼此都不完全相同
 \makestatement % 论文独创性声明
 %注释掉此两行，可以不生成中英文封面，论文独创性声明,一起由word转为pdf,由下面载入
 %\includepdf[nup=1x1, delta=0mm 0mm,scale=1,pages={1-6}]{front/front.pdf}
