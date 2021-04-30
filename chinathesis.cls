@@ -537,13 +537,22 @@
 }{%
   \if@restonecol\twocolumn \else \newpage \fi
 }
+
+\newcommand{\@supervisor}{
+  \ifx\ustc@cosupervisor\@empty
+    {\ustc@supervisor}
+    \else
+    {\ustc@supervisor\qquad\ustc@cosupervisor}
+  \fi
+}
+
 \newcommand{\@tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 \usepackage{multirow}
 \newcommand{\zhtitleproject@a}{
   \ifustc@profmaster
     \fontsize{14\bp@}{31\bp@}\selectfont
     \begin{tabular}{lp{8em}lp{1.5em}p{8em}}
-    导师姓名职称 & \multicolumn{4}{c}{\ustc@supervisor} \\
+    导师姓名职称 & \multicolumn{4}{c}{\@supervisor} \\
     \cline{2-5}    
     申请学位类别 & \multicolumn{1}{c}{\ustc@professionaltype} &{\fontsize{10.5\bp@}{10\bp@}\selectfont \@tabincell{c}{专业学位类别\\及领域名称}} &  \multicolumn{2}{c}{\ustc@major}\\
     \cline{2-2}\cline{4-5}
@@ -555,7 +564,7 @@
     \else
     \fontsize{14\bp@}{31\bp@}\selectfont
     \begin{tabular}{lp{8em}rp{8em}}
-    导师姓名职称 & \multicolumn{3}{c}{\ustc@supervisor} \\
+    导师姓名职称 & \multicolumn{3}{c}{\@supervisor} \\
     \cline{2-4}    
     申请学位级别 &  \multicolumn{1}{c}{\ustc@professionaltype} &学科专业名称 &  \multicolumn{1}{c}{\ustc@major}\\
     \cline{2-2}\cline{4-4}
@@ -653,11 +662,6 @@
     {\rmfamily\fontsize{14\bp@}{30\bp@}\selectfont
       \ustc@enthesisname\par}%
     \vskip 3.06cm%
-    % {\rmfamily\bfseries\fontsize{15\bp@}{30\bp@}\selectfont
-    %   \begin{tabular}{@{}ll@{}}%
-    %     Candidate: & \ustc@enauthor \\[1.11cm]
-    %    Supervisor: & \ustc@ensupervisor \\
-    %   \end{tabular}}%
     \ustc@supervisorline
     {\fontsize{15\bp@}{30\bp@}\selectfont \ustc@enuniversityname, Xi’an, China}
   \end{titlepage}%
@@ -1336,6 +1340,10 @@
     \def\HyRef@autopageref#1{\hyperref[{#1}]{第~\pageref*{#1} 页}}
   \fi
 }
+
+% 定义一些模板中的命令
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}  % 设置命令格式
+\newcommand\pkg{\textsf}  % 设置宏包字体
 
 
 % \subsubsection{\pkg{amsthm} 宏包}

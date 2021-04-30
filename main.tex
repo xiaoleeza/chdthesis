@@ -15,21 +15,20 @@
 \professionaltype{学位类别} % 学位类别
 \major{专业名称} % 专业，参考以往，专硕也只填写了专业名称
 \supervisor{某某\ 教授} % 导师
-% \cosupervisor{}
+\cosupervisor{某某\ 副教授}  % 副导师，不需要可注释
 \submissiondate{2019年5月20日}  % 提交日期，注释后为今日
 \defensedate{2019年5月30日}  % 答辩日期，注释后为今日
 % \secretlevel{秘密}        % 绝密|机密|秘密，注释本行则不保密
 % \secretyear{20}           % 保密年限
 
-\entitle{Study on the Subgrade Diseases in \\Permafrost of Qinghai-Tibet}
+\entitle{Study on the Subgrade Diseases in \\Permafrost of Qinghai-Tibet}  % 排版完全按照规范，如题目超过两行可以手动调整cls中的距离
 \enauthor{Wang Dazhi}
 \enmajor{Information and Communication Engineering}
 \ensupervisor{Prof. Zhang Dahai}
-% \encosupervisor{Prof. Zhang Dahai} % TODO: 增加
+\encosupervisor{A.P.\hspace{2.5mm} Li Sanbu} % 副导师,不需要可注释
 % \endate{May 1, 2017}      % Today if commented
 % \enprofessionaltype{Professional degree type}
 % \ensecretlevel{Secret}    % Top secret|Highly secret|Secret
-
 
 % 加载宏包和配置
 \usepackage{hyperref}
@@ -40,21 +39,17 @@
 \usepackage{siunitx}
 \usepackage{amsthm}
 \usepackage{pdfpages}
+\usepackage[ruled,vlined]{algorithm2e}
 
-
-\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
-\newcommand\pkg{\textsf}
-
+% 定义斜体或正体符号，详见模板第五章
 \renewcommand\vec{\symbf}
 \newcommand\mat{\symbf}
 \newcommand\ts{\symbfsf}
 \newcommand\real{\mathbf{R}}
 
-\usepackage[ruled,vlined]{algorithm2e}
-
 \begin{document}
 
-\maketitle % 中英文封面，封面内容位置大致和模板一致即可，不必深究，大部分人彼此都不完全相同
+\maketitle % 中英文封面
 \makestatement % 论文独创性声明
 %注释掉此两行，可以不生成中英文封面，论文独创性声明,一起由word转为pdf,由下面载入
 %\includepdf[nup=1x1, delta=0mm 0mm,scale=1,pages={1-6}]{front/front.pdf}
@@ -70,7 +65,6 @@
 \listoftables
 % 主要符号表
 \input{chapters/notation}
-
 
 \mainmatter
 \input{chapters/intro}
