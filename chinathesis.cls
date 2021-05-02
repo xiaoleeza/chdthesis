@@ -144,18 +144,16 @@
       \setCJKmainfont[AutoFakeBold,ItalicFont=KaiTi_GB2312]{SimSun}
       \setCJKfamilyfont{zhkai}[AutoFakeBold]{KaiTi_GB2312}
       \setCJKfamilyfont{cusong}{STZhongsong}
-      %\newcommand{\cusong}{\CJKfamily{cusong}} 
     }{
       \setCJKmainfont[AutoFakeBold,ItalicFont=KaiTi]{SimSun}
       \setCJKfamilyfont{zhkai}[AutoFakeBold]{KaiTi}
       \setCJKfamilyfont{cusong}{STZhongsong}
-      %\newcommand{\cusong}{\CJKfamily{cusong}} 
     }
     \setCJKsansfont[AutoFakeBold]{SimHei}
     \setCJKfamilyfont{zhsong}[AutoFakeBold]{SimSun}
     \setCJKfamilyfont{zhhei}{SimHei}
     \setCJKfamilyfont{cusong}{STZhongsong}
-    %\newcommand{\cusong}{\CJKfamily{cusong}} 
+    \setCJKfamilyfont{zhheicu}[AutoFakeBold=3]{SimHei}
   }{
     \ustc@strifeq{\ustc@fontset}{adobe}{
       \setCJKmainfont[
@@ -685,17 +683,17 @@
 
 % 定义原创性声明
 \newcommand\ustc@originality{%
-  \fontsize{14\bp@}{31\bp@}\selectfont 本人声明：本人所呈交的学位论文是在导师的指导下,独立进行研究工作所取%
+  \fontsize{12\bp@}{23.4\bp@}\selectfont 本人声明：本人所呈交的学位论文是在导师的指导下,独立进行研究工作所取%
   得的成果。除论文中已经注明引用的内容外，对论文的研究做出重要贡献的个%
   人和集体，均已在文中以明确方式标明。本论文中不包含任何未加明确注明的%
   其他个人或集体已经公开发表的成果。\par
   本声明的法律责任由本人承担。}
 \newcommand\ustc@authorization{%
-  \fontsize{14\bp@}{31\bp@}\selectfont 本人在导师指导下所完成的论文及相关的职务作品，知识产权归属学校。学校%
+  \fontsize{12\bp@}{23.4\bp@}\selectfont 本人在导师指导下所完成的论文及相关的职务作品，知识产权归属学校。学校%
   享有以任何方式发表、复制、公开阅览、借阅以及申请专利等权利。本人离校%
   后发表或使用学位论文或与该论文直接相关的学术论文或成果时，署名单位仍%
-  然为\ustc@universityname{}。\par
-  （保密的论文在解密后应遵守此规定）}%
+  然为\ustc@universityname{}。\\
+  （涉密论文在解密后应遵守此规定）}%
 
 % 生成空的下划线
 \newcommand\ustc@underline[2][3.2cm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
@@ -706,31 +704,38 @@
 }
 
 \newcommand\makestatement{%
+  \ifustc@pdf%将打印版和pdf版边距分别设置
+    \newgeometry{left=3.17cm,right=3.17cm,top=2.54cm,bottom=2.54cm}%
+    \else
+    \newgeometry{left=3.67cm,right=2.67cm,top=2.54cm,bottom=2.54cm}%
+  \fi
   \begin{titlepage}%
     \ustc@pdfbookmark{原创性和授权使用声明}%
     \null
-    \vskip -0.8cm% 
+    \vskip -0.78cm
     {\centering\CJKfamily{cusong}\fontsize{18\bp@}{32\bp@}\selectfont
-      \ustc@universityname{}论文独创性声明\par}%
-    \vskip 0.33cm%
+      论文独创性声明\par}%
+    \vskip 0.35cm%
     \ustc@originality\par
-    \vskip 1.3cm%
-    {\centering\rmfamily\fontsize{14\bp@}{31\bp@}\selectfont
-      \begin{tabular}{@{}ll@{}}%
-        论文作者签名： \hspace{10em} & 年\hspace{2em}月\hspace{2em}日\hspace{2em}
-      \end{tabular}\par}%
-    \vskip 2.56cm%
+    \vskip 0.82cm%
+    % {\centering\rmfamily\fontsize{14\bp@}{31\bp@}\selectfont
+    %   \begin{tabular}{@{}ll@{}}%
+    %     论文作者签名： \hspace{10em} & 年\hspace{2em}月\hspace{2em}日\hspace{2em}
+    %   \end{tabular}\par}%
+    \hspace{10.65mm}论文作者签名：\hspace{50.8mm}年\hspace{6.35mm}月\hspace{6.35mm}日
+    \par%
+    \vskip 19.1mm%
     {\centering\CJKfamily{cusong}\fontsize{18\bp@}{32\bp@}\selectfont
-      \ustc@universityname{}论文知识产权权属声明\par}%
-    \vskip 0.33cm%
+      论文知识产权权属声明\par}%
+    \vskip 2.68mm%
     \ustc@authorization\par
-    \vskip 1.6cm%
-    {\centering\rmfamily\fontsize{14\bp@}{31\bp@}\selectfont
-      \begin{tabular}{@{}ll@{}}%
-        论文作者签名： \hspace{10em} & 年\hspace{2em}月\hspace{2em}日\hspace{2em}\\[0.56cm]
-        导师签名： & 年\hspace{2em}月\hspace{2em}日\hspace{2em} \\
-      \end{tabular}\par}%
+    \vskip 16.5mm%
+    \hspace{10.65mm}论文作者签名：\hspace{50.8mm}年\hspace{6.35mm}月\hspace{6.35mm}日
+    \par%
+    \vskip 5.5mm%
+    \hspace{10.65mm}导\hspace{2.1125mm}师\hspace{2.1125mm}签\hspace{2.1125mm}名\hspace{2.1125mm}：\hspace{50.8mm}年\hspace{6.35mm}月\hspace{6.35mm}日
   \end{titlepage}%
+  \restoregeometry
 }
 
 % \subsection{章节标题}
@@ -872,7 +877,7 @@
 % 中文摘要环境。
 \newenvironment{abstract}{%
   \ustc@setchinese
-  \ustc@chapter{摘\hspace{2\ccwd}要}%
+  \ustc@chapter{\CJKfamily{zhheicu}\textbf{摘\hspace{2\ccwd}要}}%
 }{
   \par\null\par\noindent\hangindent=4\ccwd\relax
   \textbf{关键词}：\ustc@keywords
@@ -883,7 +888,7 @@
 \newenvironment{enabstract}{%
   \@openrightfalse
   \ustc@setenglish
-  \ustc@chapter{\rmfamily Abstract}%
+  \ustc@chapter{\rmfamily\textbf{Abstract}}%
   \@openrighttrue
 }{
   \par\null\par\noindent\hangindent=5.3em\relax
