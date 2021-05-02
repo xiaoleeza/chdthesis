@@ -1027,6 +1027,26 @@
   % 定义规范形式
   \def\@makefnmark@nosuperscript{\lower 0ex \hbox{注\normalfont\@thefnmark：}}
 
+% 定义带注释的表格环境
+\newcounter{@tmarkCounter}[table]
+\newcounter{@tnoteCounter}[table]
+\newsavebox{\@tabnotebox}
+\providecommand\tmark{} % so having ctable or not is irrelevant
+\providecommand\tnote{}
+\newenvironment{notetabular}[3][c]{
+  \long\def\@tabnotes{#3}%
+  \renewcommand\tmark[1][\stepcounter{@tmarkCounter}\the@tmarkCounter]{\makebox[0pt][l]{\textsuperscript{##1}}}%
+  \renewcommand\tnote[2][附注\stepcounter{@tnoteCounter}\the@tnoteCounter]{{\zihao{5}{##1：}\,##2\par}}
+  \begin{lrbox}{\@tabnotebox}
+  \begin{tabular}{#2}
+  }
+  {\end{tabular}\end{lrbox}%
+  \parbox{\wd\@tabnotebox}{
+  \usebox{\@tabnotebox}\par
+  \smallskip\@tabnotes
+    }%
+  }
+
 % 调整列表中各项之间过大的间距。
 \setlength\partopsep{\z@}
 \newcommand\ustc@nolistsep{%
