@@ -51,55 +51,93 @@
     \cmidrule{2-3}
     & Header 2.1& Header 2.2\\
     \midrule
-    foo 1\tmark[4] & foo 2 & foo 3\\
+    foo 1\tmark[4] & foo 2\tmark[4] & foo 3\\
     \bottomrule
   \end{notetabular}
 \end{table}
 
 \subsection{长表格}
 
-\begin{longtable}{c@{\extracolsep{\fill}}*{4}{c}}
-  \caption{车型一览表\label{表：车型一览表}} \\
+如某个表需要转页接排，在随后的各页上应重复表的编排，
+编号后跟表题（可省略）和“（续）”，
+可以使用\pkg{longtable}宏包创建跨页表格。
+续表应重复表头和关于单位的陈述。
+
+\begin{longtable}{l@{\extracolsep{\fill}}*{1}{l}}
+  \caption{\pkg{longtable}命令汇总\label{tab:exampletable3}} \\
   \toprule
-  车辆类型& 车型编号& 轴数& 车型种类& 车辆图示\\
+  命令& 说明\\
   \midrule
   \endfirsthead
-  \multicolumn{5}{l}{（续表）}\\
+  \multicolumn{2}{l}{（续）}\\
   \toprule
-  车辆类型& 车型编号& 轴数& 车型种类& 车辆图示\\
+  命令& 说明\\
   \midrule
   \endhead
   \bottomrule
   \endfoot
-  1& V1& 2& 小轿车等二轴家用车& 我是\\
-  2& V3& 2& 中型双轴客车和货车& 我是\\
-  3& V5& 2& 大型双轴客车和货车& 我是\\
-  4& V6& 3& 三轴大型客车& 我是\\
-  5& V7& 3& 三轴大型货车（双前轴）& 我是\\
-  6& V8& 3& 三轴大型货车（双后轴）& 我是\\
-  6& V9& 4& 四轴大型货车& 我是\\
-  7& V10& 3& 三轴拖挂车& 我是\\
-  8& V11& 4& 四轴拖挂车& 我是\\
-  9& V12& 5& 五轴拖挂车& 我是\\
-  10& V13& 5& 五轴拖挂车& 我是\\
-  11& V14& 5& 五轴拖挂车& 我是\\
-  12& V15& 6& 六轴拖挂车& 我是\\
-  13& V16& 6& 六轴拖挂车& 我是\\
+  \bottomrule
+  \bottomrule[0pt]  % 添加间距
+  \multicolumn{2}{l}{附注1：该命令产生的是页脚注，见\ref{section:footnote}节；}\\
+  \multicolumn{2}{l}{附注2：使用footnotemark配合endlatfoot创建附注。}\\
+  \endlastfoot
+  不填写（默认）& 表格居中\\
+  \verb|[c]|& 表格居中\\
+  \verb|[l]|& 表格左对齐\\
+  \verb|[r]|& 表格右对齐\\
+  \verb|\\|& 结束一行表格\\
+  \verb|\\[距离]|& 结束一行，并增加额外间距\\
+  \multicolumn{2}{c}{（以下是为方便演示增加的额外间距）}\\[13cm]
+  \verb|\\*|& 结束一行，并禁止在此分页\\*
+  \verb|\kill|& 当前行不输出，只参与宽度计算\\
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\kill
+  \verb|\endhead|& 此命令以上部分是每页的表头\\
+  \verb|\endfirsthead|& 此命令以上部分是表格第一页的表头\\
+  \verb|\endfoot|& 此命令以上部分是每页的表尾\\
+  \verb|\endlastfoot|& 此命令以上部分是表格最后一页的表尾\\
+  \verb|\caption{标题}|& 生成带编号的标题\\
+  \verb|\caption*{标题}|& 生成不带编号的标题\\
+  \verb|\newpage|& 强制分页\\
+  \verb|\pagebreak[程度]|& 允许分页的程度（0-4）\\
+  \verb|\nopagebreak[程度]|& 禁止分页的程度（0-4）\\
+  \verb|\footnote|\footnotemark& 使用脚注，注意不能用在表格头尾\\
+  \verb|\footnotemark|\footnotemark& 单独产生脚注编号，不能用在表格头尾\\
+  \verb|\footnotetext|& 单独产生脚注文字\\
+  \verb|\LTleft|& 对齐方式留空时，表格左边的间距，默认为\verb|\fill|\\
+  \verb|\LTright|& 对齐方式留空时，表格右边的间距，默认为\verb|\fill|\\
+  \verb|\LTpre|& 表格上方间距，默认为\verb|\bigskipamount|\\
+  \verb|\LTpost|& 表格下方间距，默认为\verb|\bigskipamount|\\
+  \verb|\LTcapwidth|& 表格标题的宽度，默认为4\,in\\
 \end{longtable}
 
 
-\section{插图}
+\section{图}
+图包括曲线图、结构图、示意图、图解、框图、流程图、记录图、布置图、地图、照片、图版等。
+图应具有“自明性”，即只看图、图题和图例，不阅读正文，就可理解图意。
+图的编号应采用阿拉伯数字分章依续编号，如：“图3.2”。
 
+\subsection{插入图片}
 有的同学可能听说“\LaTeX{} 只能使用 eps 格式的图片”，甚至把 jpg 格式转为 eps。
 事实上，这种做法已经过时。
 而且每次编译时都要要调用外部工具解析 eps，导致降低编译速度。
 所以我们推荐矢量图直接使用 pdf 格式，位图使用 jpeg 或 png 格式。
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.3\textwidth]{figures/chdcolorlogo.eps}
-  \caption{图号、图题置于图的下方}
+  \includegraphics[width=0.3\textwidth]{chdcolorlogo.eps}
+  \caption{插入eps图片}
   \label{fig:logo}
-  \note{注：图注的内容不宜放到图题中。}
+  \note{附注1：现已不推荐使用。}
+\end{figure}
+
+\pkg{Texlive}中有许多自带的工具，比如可以利用\pkg{epstopdf}将eps图片转为pdf，
+利用\pkg{pdfcrop}裁剪pdf图片，这些工具可在
+\,\verb|Texlive|\verb|\版本|\verb|\bin|\verb|\win32|\,文件夹中找到，
+本模板\pkg{figure}文件夹中的pdf即是通过\pkg{epstopdf}得到的。
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.3\textwidth]{chdcolorlogo.pdf}
+  \caption{插入pdf图片}
+  \label{fig:logo}
 \end{figure}
 
 关于图片的并排，推荐使用较新的 \pkg{subcaption} 宏包，
