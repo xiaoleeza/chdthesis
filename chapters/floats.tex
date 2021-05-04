@@ -14,11 +14,11 @@
 
 一律使用三线表，与文字齐宽，上下边线，线粗1.5 磅，表内线，线粗1 磅，
 可直接使用\verb|\toprule|、\verb|\midrule|、\verb|\cmidrule{}|、\verb|\bottomrule|生成表格线，
-如表~\ref{tab:exampletable1}，使用\verb|tabular*|环境指定表格宽度，
+如\autoref{tab:exampletable1}，使用\verb|tabular*|环境指定表格宽度，
 并利用\verb|@{\extracolsep{\fill}}|使内容自动伸展。
 \begin{table}[htb]
   \centering
-  \caption{表号和表题在表的正上方}
+  \caption{三线表}
   \label{tab:exampletable1}
   \begin{tabular*}{0.6\linewidth}{c@{\extracolsep{\fill}}*{1}{c}}
     \toprule
@@ -35,7 +35,7 @@
 图、表中若有附注时，附注各项的序号一律用“附注 + 阿拉伯数字 + 冒号” ，如：“附注1：”。
 附注写在图、表的下方，一般采用5号宋体。
 
-针对撰写规范的规定，模板自定义了\verb|notetabular|环境创建带附注的表格，如表~\ref{tab:exampletable2}。
+针对撰写规范的规定，模板自定义了\verb|notetabular|环境创建带附注的表格，如\autoref{tab:exampletable2}。
 使用方法与\verb|tabular*|类似，只是多了\verb|\tnote|参数。
 \begin{table}
   \centering
@@ -78,8 +78,8 @@
   \endfoot
   \bottomrule
   \bottomrule[0pt]  % 添加间距
-  \multicolumn{2}{l}{附注1：该命令产生的是页脚注，见\ref{section:footnote}节；}\\
-  \multicolumn{2}{l}{附注2：使用footnotemark配合endlatfoot创建附注。}\\
+  \multicolumn{2}{l}{附注1：该命令产生的是页脚注，见\autoref{section:footnote}；}\\
+  \multicolumn{2}{l}{附注2：使用tmark（见\autoref{tab:exampletable2}）配合endlatfoot创建长表格附注。}\\
   \endlastfoot
   不填写（默认）& 表格居中\\
   \verb|[c]|& 表格居中\\
@@ -100,8 +100,8 @@
   \verb|\newpage|& 强制分页\\
   \verb|\pagebreak[程度]|& 允许分页的程度（0-4）\\
   \verb|\nopagebreak[程度]|& 禁止分页的程度（0-4）\\
-  \verb|\footnote|\footnotemark& 使用脚注，注意不能用在表格头尾\\
-  \verb|\footnotemark|\footnotemark& 单独产生脚注编号，不能用在表格头尾\\
+  \verb|\footnote|\tmark[1]& 使用脚注，注意不能用在表格头尾\\
+  \verb|\footnotemark|& 单独产生脚注编号，不能用在表格头尾\\
   \verb|\footnotetext|& 单独产生脚注文字\\
   \verb|\LTleft|& 对齐方式留空时，表格左边的间距，默认为\verb|\fill|\\
   \verb|\LTright|& 对齐方式留空时，表格右边的间距，默认为\verb|\fill|\\
@@ -114,7 +114,7 @@
 \section{图}
 图包括曲线图、结构图、示意图、图解、框图、流程图、记录图、布置图、地图、照片、图版等。
 图应具有“自明性”，即只看图、图题和图例，不阅读正文，就可理解图意。
-图的编号应采用阿拉伯数字分章依续编号，如：“图3.2”。
+图的编号应采用阿拉伯数字分章依续编号，如：“\autoref{fig:epslogo}”。
 
 \subsection{插入图片}
 有的同学可能听说“\LaTeX{} 只能使用 eps 格式的图片”，甚至把 jpg 格式转为 eps。
@@ -123,22 +123,108 @@
 所以我们推荐矢量图直接使用 pdf 格式，位图使用 jpeg 或 png 格式。
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.3\textwidth]{chdcolorlogo.eps}
+  \includegraphics[width=0.35\linewidth]{chdcolorlogo.eps}
   \caption{插入eps图片}
-  \label{fig:logo}
+  \label{fig:epslogo}
   \note{附注1：现已不推荐使用。}
 \end{figure}
 
 \pkg{Texlive}中有许多自带的工具，比如可以利用\pkg{epstopdf}将eps图片转为pdf，
 利用\pkg{pdfcrop}裁剪pdf图片，这些工具可在
 \,\verb|Texlive|\verb|\版本|\verb|\bin|\verb|\win32|\,文件夹中找到，
-本模板\pkg{figure}文件夹中的pdf即是通过\pkg{epstopdf}得到的。
+或者直接通过命令行使用，本模板\pkg{figure}文件夹中的pdf即是通过\pkg{epstopdf}得到的。
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.3\textwidth]{chdcolorlogo.pdf}
+  \includegraphics[width=0.35\linewidth]{chdcolorlogo.pdf}
   \caption{插入pdf图片}
-  \label{fig:logo}
+  \label{fig:pdflogo}
 \end{figure}
 
+\subsection{并排放置图片}
+
 关于图片的并排，推荐使用较新的 \pkg{subcaption} 宏包，
-不建议使用 \pkg{subfigure} 或 \pkg{subfig} 等宏包。
+不建议使用 \pkg{subfigure} 或 \pkg{subfig} 等宏包。\footnote{此三个宏包不能同时导入}
+以下为\pkg{subcaption} 宏包几种排列子图的方法。
+\begin{figure}
+  \centering
+  \subcaptionbox{logo1\label{fig:logo1}}[.3\linewidth]{\includegraphics[width=.7\linewidth]{chdredlogo.pdf}}
+  \subcaptionbox{logo2\label{fig:logo2}}[.3\linewidth]{\includegraphics[width=.7\linewidth]{chdredlogo.pdf}}
+  \caption{使用\textsf{subcaptionbox}排列子图}
+  \note{附注1：使用\textsf{subcaptionbox}时，\textsf{label应放在标题中}}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdbluelogo.pdf}
+    \caption{logo1}
+  \end{subfigure}
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdbluelogo.pdf}
+    \caption{logo2}
+  \end{subfigure}
+  \caption{使用\textsf{subfigure}排列子图}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{minipage}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdblacklogo.pdf}
+    \subcaption{logo1}
+  \end{minipage}
+  \centering
+  \begin{minipage}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdblacklogo.pdf}
+    \subcaption{logo2}
+  \end{minipage}
+  \caption{使用使用\textsf{minipage}和\textsf{subcaption}排列子图}
+\end{figure}
+
+\subsection{跨页放置图片}
+
+跨页放置子图，需要定义两个\pkg{figure}环境，并对\pkg{figure}的计数器进行修改，
+好在\pkg{caption}提供了一个简化的操作，通过\verb|\ContinuedFloat|命令即可实现计数器的接续,
+如\autoref{fig:cross}。
+\begin{figure}[b]
+  \centering
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdblacklogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdblacklogo.pdf}
+    \caption{blacklogo}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdbluelogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdbluelogo.pdf}
+    \caption{bluelogo}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \ContinuedFloat
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdredlogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdredlogo.pdf}
+    \caption{redlogo}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdcolorlogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdcolorlogo.pdf}
+    \caption{colorlogo}
+  \end{subfigure}
+  \caption{使用\textsf{ContinuedFloat}排版跨页图片\label{fig:cross}}
+\end{figure}
+
+\mbox{}

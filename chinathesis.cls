@@ -15,6 +15,7 @@
 %%    https://www.latex-project.org/lppl.txt
 %% and version 1.3c or later is part of all distributions of LaTeX
 %% version 2005/12/01 or later.
+%% TODO: 添加保密封面
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{chinathesis}
   [2018/10/27 v1.0 A template framework for Chinese dissertations]
@@ -448,7 +449,7 @@
 \def\ps@none{}
 \ctexset{chapter/pagestyle=none}
 
-\usepackage{fancyhdr}
+\RequirePackage{fancyhdr}
 \fancypagestyle{myfancy}{
 \fancyhf{}
 \fancyfoot[C]{ \thepage}
@@ -547,7 +548,7 @@
 }
 
 \newcommand{\@tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-\usepackage{multirow}
+\RequirePackage{multirow}
 \newcommand{\zhtitleproject@a}{
   \ifustc@profmaster
     \fontsize{14\bp@}{31\bp@}\selectfont
@@ -1034,10 +1035,10 @@
 \newcounter{@tnoteCounter}[table]
 \newsavebox{\@tabnotebox}
 \providecommand\tmark{}
+\renewcommand\tmark[1][\stepcounter{@tmarkCounter}\the@tmarkCounter]{\makebox[0pt][l]{\textsuperscript{#1}}}%
 \providecommand\tnote{}
 \newenvironment{notetabular}[4][c]{
   \long\def\@tabnotes{#4}%
-  \renewcommand\tmark[1][\stepcounter{@tmarkCounter}\the@tmarkCounter]{\makebox[0pt][l]{\textsuperscript{##1}}}%
   \renewcommand\tnote[2][附注\stepcounter{@tnoteCounter}\the@tnoteCounter]{{\zihao{5}{##1：}\,##2\par}}
   \begin{lrbox}{\@tabnotebox}
   \begin{tabular*}{#2}{#3}
@@ -1359,10 +1360,10 @@
     \def\appendixautorefname{附录}
     \def\chapterautorefname~#1\null{第~#1~章\null}
     \def\sectionautorefname~#1\null{第~#1~节\null}
-    \def\subsectionautorefname~#1\null{第~#1~小节\null}
-    \def\subsubsectionautorefname~#1\null{第~#1~小小节\null}
-    \def\paragraphautorefname~#1\null{第~#1~段\null}
-    \def\subparagraphautorefname~#1\null{第~#1~小段\null}
+    \def\subsectionautorefname~#1\null{第~#1~条\null}
+    \def\subsubsectionautorefname~#1\null{第~#1~款\null}
+    \def\paragraphautorefname~#1\null{第~#1~项\null}
+    \def\subparagraphautorefname~#1\null{第~#1~目\null}
     \def\theoremautorefname{定理}
     \def\HyRef@autopageref#1{\hyperref[{#1}]{第~\pageref*{#1} 页}}
   \fi
