@@ -332,7 +332,7 @@
   \newcommand\ustc@acknowledgementsname{致谢}
   \newcommand\ustc@publicationsname{攻读学位期间取得的研究成果}
   \newcommand\ustc@notationname{符号说明}
-  \newcommand\ustc@summaryname{结论与展望}
+  \newcommand\ustc@summaryname{结论}
 \else
   \renewcommand\figurename{Fig.}
   \newcommand\ustc@acknowledgementsname{Acknowledgements}
@@ -451,7 +451,7 @@
 \ctexset{chapter/pagestyle=none}
 
 \RequirePackage{fancyhdr}
-\fancypagestyle{myfancy}{
+\fancypagestyle{@myfancy}{
 \fancyhf{}
 \fancyfoot[C]{ \thepage}
 \renewcommand{\headrulewidth}{0pt}
@@ -461,7 +461,7 @@
   \cleardoublepage
   \@mainmatterfalse
   \pagenumbering{Roman}%
-  \pagestyle{myfancy}%
+  \pagestyle{@myfancy}%
 }
 
 \renewcommand\mainmatter{%
@@ -599,11 +599,24 @@
   \begin{titlepage}%
     \ustc@pdfbookmark{封面}%
     {\centering\fontsize{14\bp@}{31\bp@}\selectfont
-    \hspace{3mm}
-    \begin{tabular}{p{12.42cm}r}
-    分类号:  \ustc@classnumber & \multirow{2}{18mm}[-1.8mm]{\includegraphics[height=1.78cm]{figures/chdredlogo.eps}} \\
-    10710-\ustc@studentid &  \\
-    \end{tabular}}\\
+    % \ifx\ustc@secretlevel\@empty
+    %   \else
+    %   {\flushright{\ustc@secretlevel$\bigstar$\hspace{1.5mm}\ustc@secretyear 年}\par}
+    % \fi
+    \ifx\ustc@secretlevel\@empty
+      {\hspace{3mm}
+      \begin{tabular}{p{12.42cm}r}
+        分类号:  \ustc@classnumber & \multirow{2}{18mm}[-1.8mm]{\includegraphics[height=1.78cm]{figures/chdredlogo.pdf}} \\
+        10710-\ustc@studentid &  \\
+      \end{tabular}\\}
+      \else
+      {\hspace{3mm}
+      \begin{tabular}{p{12.42cm}r}
+        \multicolumn{2}{r}{\ustc@secretlevel$\bigstar$\hspace{1.5mm}\ustc@secretyear 年}\\
+        分类号:  \ustc@classnumber & \multirow{2}{18mm}[-1.8mm]{\includegraphics[height=1.78cm]{figures/chdredlogo.pdf}} \\
+        10710-\ustc@studentid &  \\
+      \end{tabular}\\}
+    \fi}
     \vskip 1.1cm%
     \centering\includegraphics[width=5.41cm]{figures/name.jpg} \\
     \vskip 0.38cm%
@@ -1260,10 +1273,10 @@
 % BibTeX 生成参考文献表的样式在 \file{bst} 文件中提供。
 
 % 定义了一个满足要求的总结环境：
-\newenvironment{summary}{%
-  \chapter*{\ustc@summaryname}%
-  \addcontentsline{toc}{chapter}{\ustc@summaryname}
-  \markboth{\ustc@summaryname}{\ustc@summaryname}
+\newenvironment{summary}[1][\ustc@summaryname]{%
+  \chapter*{#1}%
+  \addcontentsline{toc}{chapter}{#1}
+  \markboth{#1}{#1}
 }{}
 % 定义了一个满足要求的致谢环境：
 \newenvironment{acknowledgements}{%

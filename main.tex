@@ -2,11 +2,13 @@
 % !TeX program = xelatex
 % !TeX spellcheck = en_US
 
+%% 开始书写前请阅读本文及注释了解本模板自定义的相关命令！！
+
 \documentclass[doctor,pdf]{chinathesis}
 % [doctor|master|bachelor] 选择学位模板，默认博士
 % [chinese|english] 选择中英文模板，默认中文
 % [print|pdf] 选择版式，默认为print
-% [defense] 封面下方加入答辩委员会人员
+% [defense] 封面下方增加答辩委员会人员
 
 \title{论文题目}
 \classnumber{TP396.4} % 中图分类号，根据研究方向填写
@@ -18,8 +20,8 @@
 \cosupervisor{某某\ 副教授}  % 副导师，不需要可注释
 \submissiondate{2019年5月20日}  % 提交日期，注释后为今日
 \defensedate{2019年5月30日}  % 答辩日期，注释后为今日
-% \secretlevel{秘密}        % 绝密|机密|秘密，注释本行则不保密
-% \secretyear{20}           % 保密年限
+% \secretlevel{内部}        % 绝密|机密|秘密|内部，注释本行则不保密
+% \secretyear{2}           % 保密年限
 
 \entitle{Study on the Subgrade Diseases in \\Permafrost of Qinghai-Tibet}  % 排版完全按照规范，如题目超过两行可以手动调整cls中的距离
 \enauthor{Wang Dazhi}
@@ -39,7 +41,7 @@
 \usepackage{siunitx}
 \usepackage{amsthm}
 \usepackage{pdfpages}
-\usepackage[ruled,vlined]{algorithm2e}
+\usepackage[ruled,vlined]{algorithm2e}  % 也可使用minted宏包输入伪代码
 \usepackage{subcaption}
 
 % 定义斜体或正体符号，详见模板第五章
