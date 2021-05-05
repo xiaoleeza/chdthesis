@@ -65,6 +65,7 @@
 
 % 建议在模板开始处载入全部宏包，不要轻易改变加载顺序。
 % \pkg{hyperref} 一般在最后加载。
+\RequirePackage{amssymb}
 \RequirePackage{amsmath}
 \RequirePackage{unicode-math}
 \RequirePackage{geometry}
@@ -698,14 +699,6 @@
   然为\ustc@universityname{}。\\
   （涉密论文在解密后应遵守此规定）}%
 
-% 生成空的下划线
-\newcommand\ustc@underline[2][3.2cm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
-
-\newcommand\ustc@checkbox{%
-  \makebox[\z@][l]{$\square$}%
-  \raisebox{-0.2ex}{\hspace{0.1em}$\checkmark$}%
-}
-
 \newcommand\makestatement{%
   \ifustc@pdf%将打印版和pdf版边距分别设置
     \newgeometry{left=3.17cm,right=3.17cm,top=2.54cm,bottom=2.54cm}%
@@ -1172,9 +1165,6 @@
 
 \newcommand\bm{\symbf}
 \renewcommand\boldsymbol{\symbf}
-
-% 兼容 \pkg{amssymb} 中的命令。
-\newcommand\square{\mdlgwhtsquare}
 
 % 提供一些方便的命令：
 \newcommand\upe{\symup{e}}
