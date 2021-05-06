@@ -15,24 +15,28 @@
 %%    https://www.latex-project.org/lppl.txt
 %% and version 1.3c or later is part of all distributions of LaTeX
 %% version 2005/12/01 or later.
-%% 
+%% TODO: 添加保密封面
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{chinathesis}
   [2018/10/27 v1.0 A template framework for Chinese dissertations]
 \newif\ifustc@doctor
 \newif\ifustc@master
+\newif\ifustc@profmaster
 \newif\ifustc@bachelor
 \newif\ifustc@chinese
 \newif\ifustc@numerical
 \newif\ifustc@super
 \newif\ifustc@pdf
-\DeclareOption{doctor}{\ustc@doctortrue\ustc@masterfalse\ustc@bachelorfalse}
-\DeclareOption{master}{\ustc@doctorfalse\ustc@mastertrue\ustc@bachelorfalse}
-\DeclareOption{bachelor}{\ustc@doctorfalse\ustc@masterfalse\ustc@bachelortrue}
+\newif\ifustc@zhtitledefense
+\DeclareOption{doctor}{\ustc@doctortrue\ustc@masterfalse\ustc@profmasterfalse\ustc@bachelorfalse}
+\DeclareOption{master}{\ustc@doctorfalse\ustc@mastertrue\ustc@profmasterfalse\ustc@bachelorfalse}
+\DeclareOption{profmaster}{\ustc@doctorfalse\ustc@masterfalse\ustc@profmastertrue\ustc@bachelorfalse}
+\DeclareOption{bachelor}{\ustc@doctorfalse\ustc@masterfalse\ustc@profmasterfalse\ustc@bachelortrue}
 \DeclareOption{chinese}{\ustc@chinesetrue}
 \DeclareOption{english}{\ustc@chinesefalse}
 \DeclareOption{print}{\ustc@pdffalse}
 \DeclareOption{pdf}{\ustc@pdftrue}
+\DeclareOption{defense}{\ustc@zhtitledefensetrue}
 \DeclareOption{super}{\ustc@numericaltrue\ustc@supertrue}
 \DeclareOption{numbers}{\ustc@numericaltrue\ustc@superfalse}
 \DeclareOption{authoryear}{\ustc@numericalfalse}
@@ -61,6 +65,7 @@
 
 % 建议在模板开始处载入全部宏包，不要轻易改变加载顺序。
 % \pkg{hyperref} 一般在最后加载。
+\RequirePackage{amssymb}
 \RequirePackage{amsmath}
 \RequirePackage{unicode-math}
 \RequirePackage{geometry}
@@ -141,18 +146,16 @@
       \setCJKmainfont[AutoFakeBold,ItalicFont=KaiTi_GB2312]{SimSun}
       \setCJKfamilyfont{zhkai}[AutoFakeBold]{KaiTi_GB2312}
       \setCJKfamilyfont{cusong}{STZhongsong}
-      %\newcommand{\cusong}{\CJKfamily{cusong}} 
     }{
       \setCJKmainfont[AutoFakeBold,ItalicFont=KaiTi]{SimSun}
       \setCJKfamilyfont{zhkai}[AutoFakeBold]{KaiTi}
       \setCJKfamilyfont{cusong}{STZhongsong}
-      %\newcommand{\cusong}{\CJKfamily{cusong}} 
     }
     \setCJKsansfont[AutoFakeBold]{SimHei}
     \setCJKfamilyfont{zhsong}[AutoFakeBold]{SimSun}
     \setCJKfamilyfont{zhhei}{SimHei}
     \setCJKfamilyfont{cusong}{STZhongsong}
-    %\newcommand{\cusong}{\CJKfamily{cusong}} 
+    \setCJKfamilyfont{zhheicu}[AutoFakeBold=3]{SimHei}
   }{
     \ustc@strifeq{\ustc@fontset}{adobe}{
       \setCJKmainfont[
@@ -321,7 +324,6 @@
 }
 
 % 这里设置了中英文的各种名字。
-
 \newcommand\ustc@universityname{长安大学}
 \newcommand\ustc@enuniversityname{Chang'an University}
 \ifustc@chinese
@@ -330,7 +332,7 @@
   \newcommand\ustc@acknowledgementsname{致谢}
   \newcommand\ustc@publicationsname{攻读学位期间取得的研究成果}
   \newcommand\ustc@notationname{符号说明}
-  \newcommand\ustc@summaryname{总结与展望}
+  \newcommand\ustc@summaryname{结论}
 \else
   \renewcommand\figurename{Fig.}
   \newcommand\ustc@acknowledgementsname{Acknowledgements}
@@ -372,7 +374,11 @@
   \ifustc@master
     硕士学位论文
   \else
-    学士学位论文
+    \ifustc@profmaster
+    硕士学位论文
+    \else
+      学士学位论文
+    \fi%
   \fi%
 \fi%
 }
@@ -444,14 +450,29 @@
 \def\ps@none{}
 \ctexset{chapter/pagestyle=none}
 
-% 研究生要求从“中文摘要”开始页码用大写罗马数字，
+\RequirePackage{fancyhdr}
+\fancypagestyle{@myfancy}{
+\fancyhf{}
+\fancyfoot[C]{ \thepage}
+\renewcommand{\headrulewidth}{0pt}
+}
+% 正文之前无页眉
 \renewcommand\frontmatter{%
   \cleardoublepage
   \@mainmatterfalse
   \pagenumbering{Roman}%
-  \pagestyle{plain}%
+  \pagestyle{@myfancy}%
 }
 
+\renewcommand\mainmatter{%
+  \cleardoublepage
+  \@mainmattertrue
+  \AtBeginEnvironment{tabular}{\zihao{5}}  % 设定表格字号
+  \AtBeginEnvironment{tabular*}{\zihao{5}}
+  \AtBeginEnvironment{longtable}{\zihao{5}}
+  \pagenumbering{arabic}%
+  \pagestyle{plain}%
+}
 
 \def\ustc@define@term#1#2{%
   \expandafter\gdef\csname #1\endcsname##1{%
@@ -483,16 +504,23 @@
 \ustc@define@term{ensecretlevel}{}
 \ustc@define@term{keywords}{}
 \ustc@define@term{enkeywords}{}
+\newcommand\@sbf[1]{\renewcommand{\CJKglue}{\hskip 0.79cm}\scalebox{0.8}[1]{#1}}
+\newcommand\@sbfp[1]{\scalebox{0.8}[1]{#1}}
 \ifustc@doctor
-  \newcommand\ustc@thesisname{\CJKfamily{cusong}博\hspace{0.62cm}士\hspace{0.62cm}学\hspace{0.62cm}位\hspace{0.62cm}论\hspace{0.62cm}文}
+  \newcommand\ustc@thesisname{\CJKfamily{cusong}\@sbf{博士学位论文}}
   \newcommand\ustc@enthesisname{A Dissertation Submitted for the Degree of Doctor}
 \else
   \ifustc@master
-    \newcommand\ustc@thesisname{\CJKfamily{cusong}硕\hspace{0.62cm}士\hspace{0.62cm}学\hspace{0.62cm}位\hspace{0.62cm}论\hspace{0.62cm}文}
-    \newcommand\ustc@enthesisname{A Dissertation Submitted for the Degree of Master}
+    \newcommand\ustc@thesisname{\CJKfamily{cusong}\@sbf{硕士学位论文}}
+    \newcommand\ustc@enthesisname{A Thesis Submitted for the Degree of Master}
   \else
-    \newcommand\ustc@thesisname{学士学位论文}
-    \newcommand\ustc@enthesisname{A dissertation for bachelor's degree}
+    \ifustc@profmaster
+      \newcommand\ustc@thesisname{\CJKfamily{cusong}\@sbfp{专业硕士学位论文}}
+      \newcommand\ustc@enthesisname{A Thesis Submitted for the Degree of Master}
+    \else
+      \newcommand\ustc@thesisname{学士学位论文}
+      \newcommand\ustc@enthesisname{A dissertation for bachelor's degree}
+    \fi
   \fi
 \fi
 
@@ -512,6 +540,53 @@
   \if@restonecol\twocolumn \else \newpage \fi
 }
 
+\newcommand{\@supervisor}{
+  \ifx\ustc@cosupervisor\@empty
+    {\ustc@supervisor}
+    \else
+    {\ustc@supervisor\qquad\ustc@cosupervisor}
+  \fi
+}
+
+\newcommand{\@tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\RequirePackage{multirow}
+\newcommand{\zhtitleproject@a}{
+  \ifustc@profmaster
+    \fontsize{14\bp@}{31\bp@}\selectfont
+    \begin{tabular}{lp{8em}lp{1.5em}p{8em}}
+    导师姓名职称 & \multicolumn{4}{c}{\@supervisor} \\
+    \cline{2-5}    
+    申请学位类别 & \multicolumn{1}{c}{\ustc@professionaltype} &{\fontsize{10.5\bp@}{10\bp@}\selectfont \@tabincell{c}{专业学位类别\\及领域名称}} &  \multicolumn{2}{c}{\ustc@major}\\
+    \cline{2-2}\cline{4-5}
+    论文提交日期 & \multicolumn{1}{c}{\ustc@submissiondate} & \multicolumn{2}{c}{论文答辩日期} &\multicolumn{1}{c}{\ustc@defensedate} \\
+    \cline{2-2}\cline{5-5}
+    学位授予单位 & \multicolumn{4}{c}{长安大学} \\
+    \cline{2-5}
+    \end{tabular}
+    \else
+    \fontsize{14\bp@}{31\bp@}\selectfont
+    \begin{tabular}{lp{8em}rp{8em}}
+    导师姓名职称 & \multicolumn{3}{c}{\@supervisor} \\
+    \cline{2-4}    
+    申请学位级别 &  \multicolumn{1}{c}{\ustc@professionaltype} &学科专业名称 &  \multicolumn{1}{c}{\ustc@major}\\
+    \cline{2-2}\cline{4-4}
+    论文提交日期 & \multicolumn{1}{c}{\ustc@submissiondate} & 论文答辩日期 &\multicolumn{1}{c}{\ustc@defensedate} \\
+    \cline{2-2}\cline{4-4}    
+    学位授予单位 & \multicolumn{3}{c}{长安大学} \\
+    \cline{2-4}    
+    \end{tabular}
+  \fi
+    }
+
+\newcommand{\zhtitleproject@b}{
+  \fontsize{14\bp@}{31\bp@}\selectfont
+  \begin{tabular}{lp{7.2cm}}
+    答辩委员会主席& \\
+    \cline{2-2}
+    学位论文评阅人& \\
+    \cline{2-2}
+  \end{tabular}
+  }
 % 中文封面：
 % 密级仿宋 14 磅；
 % 论文类型黑体 56 磅；
@@ -519,42 +594,72 @@
 % 作者姓名宋体 16 磅，单倍行距；
 % 注意这里的“单倍行距”的地方开启了“对齐到网格”，所以实际行距有所偏差，
 % 所以只能使用直尺测量。
-\usepackage{multirow}
 \newcommand\ustc@makezhtitle{%
   \ustc@setchinese
   \begin{titlepage}%
     \ustc@pdfbookmark{封面}%
     {\centering\fontsize{14\bp@}{31\bp@}\selectfont
-    \begin{tabular}{p{13.17cm}r}
-    分类号:  \ustc@classnumber & \multirow{2}[0]{*}{\includegraphics[height=1.9cm]{figures/chdredlogo.eps}} \\
-    10710-\ustc@studentid &  \\
-    \end{tabular}}\\
+    % \ifx\ustc@secretlevel\@empty
+    %   \else
+    %   {\flushright{\ustc@secretlevel$\bigstar$\hspace{1.5mm}\ustc@secretyear 年}\par}
+    % \fi
+    \ifx\ustc@secretlevel\@empty
+      {\hspace{3mm}
+      \begin{tabular}{p{12.42cm}r}
+        分类号:  \ustc@classnumber & \multirow{2}{18mm}[-1.8mm]{\includegraphics[height=1.78cm]{figures/chdredlogo.pdf}} \\
+        10710-\ustc@studentid &  \\
+      \end{tabular}\\}
+      \else
+      {\hspace{3mm}
+      \begin{tabular}{p{12.42cm}r}
+        \multicolumn{2}{r}{\ustc@secretlevel$\bigstar$\hspace{1.5mm}\ustc@secretyear 年}\\
+        分类号:  \ustc@classnumber & \multirow{2}{18mm}[-1.8mm]{\includegraphics[height=1.78cm]{figures/chdredlogo.pdf}} \\
+        10710-\ustc@studentid &  \\
+      \end{tabular}\\}
+    \fi}
     \vskip 1.1cm%
-   \centering\includegraphics[width=5.41cm]{figures/name.jpg} \\
-    \vskip 0.41cm%
+    \centering\includegraphics[width=5.41cm]{figures/name.jpg} \\
+    \vskip 0.38cm%
     {\fontsize{45\bp@}{45\bp@}\selectfont
       \ustc@thesisname\par}%
     \vskip -0.11cm%
     \parbox[t][3.5cm][c]{\textwidth}{%
-      \centering\fontsize{18\bp@}{18\bp@}\selectfont
+      \centering\fontsize{22\bp@}{22\bp@}\selectfont
       \ustc@title\par}\par
       {\fontsize{14\bp@}{31\bp@}\selectfont\ustc@author}\\
-    \vskip 4.03cm%
-    {\fontsize{14\bp@}{31\bp@}\selectfont
-      \begin{tabular}{lp{8em}rp{8em}}
-     导师姓名职称 & \multicolumn{3}{c}{\ustc@supervisor} \\\cline{2-4}    
-     申请学位级别 &  \multicolumn{1}{c}{\ustc@professionaltype} &学科专业名称 &  \multicolumn{1}{c}{\ustc@major}\\\cline{2-2}\cline{4-4}
-     论文提交日期 & \multicolumn{1}{c}{\ustc@submissiondate} & 论文答辩日期 &\multicolumn{1}{c}{\ustc@defensedate} \\\cline{2-2}\cline{4-4}    
-     学位授予单位 & \multicolumn{3}{c}{长安大学} \\\cline{2-4}    
-     \end{tabular}\par}%
+    \vskip 3.4cm%
+    \flushright{
+      \zhtitleproject@a%
+      \par%
+      \ifustc@zhtitledefense
+        \zhtitleproject@b%
+        \else
+        % \relax
+      \fi
+    }%
+    \par%
   \end{titlepage}%
   \ustc@setdefaultlanguage
 }
+
 \newcommand\ustc@supervisorline{%
   \ifx\ustc@encosupervisor\@empty
-    Supervisor: \ustc@ensupervisor
-  \else
-    Supervisors: \ustc@ensupervisor, \ustc@encosupervisor
+    {\rmfamily\bfseries\fontsize{15\bp@}{30\bp@}\selectfont
+    \begin{tabular}{@{}ll@{}}%
+      Candidate: & \ustc@enauthor \\[1.11cm]
+      Supervisor: & \ustc@ensupervisor \\
+    \end{tabular}}%
+    \par%
+    \vskip 4.6cm%
+    \else
+    {\rmfamily\bfseries\fontsize{15\bp@}{30\bp@}\selectfont
+    \begin{tabular}{@{}ll@{}}%
+      Candidate: & \ustc@enauthor \\[1.11cm]
+      Supervisor: & \ustc@ensupervisor \\
+      & \ustc@encosupervisor
+    \end{tabular}}%
+    \par%
+    \vskip 3.55cm%
   \fi
 }
 
@@ -564,29 +669,27 @@
   \begin{titlepage}%
     \ustc@pdfbookmark{Title page}%
     \centering
-    \vskip 1.18cm%
-    \parbox[t][4.5cm][c]{\textwidth}{%
+    \mbox{}
+    \vskip 3.15cm%
+    \parbox[t][3.3cm][t]{\textwidth}{%
       \centering\rmfamily\bfseries\fontsize{18\bp@}{30\bp@}\selectfont
       \ustc@entitle\par}\par
-    \vskip 2.14cm%
     {\rmfamily\fontsize{14\bp@}{30\bp@}\selectfont
       \ustc@enthesisname\par}%
-    \vskip 3.64cm%
-    {\rmfamily\bfseries\fontsize{15\bp@}{30\bp@}\selectfont
-      \begin{tabular}{@{}ll@{}}%
-        Candidate: & \ustc@enauthor \\[1.11cm]
-       Supervisor: & \ustc@ensupervisor \\
-      \end{tabular}\par}%
-       \vskip 5.35cm%
-      {\fontsize{15\bp@}{30\bp@}\selectfont \ustc@enuniversityname, Xi’an, China}
+    \vskip 3.06cm%
+    \ustc@supervisorline
+    {\fontsize{15\bp@}{30\bp@}\selectfont \ustc@enuniversityname, Xi’an, China}
   \end{titlepage}%
   \ustc@setdefaultlanguage
 }
 
-% 重新定义 \cs{maketitle}，调用 \cs{ustc@makezhtitle}, \cs{ustc@makeentitle}
 % 分别生成中、英文封面。
 \renewcommand\maketitle{%
-  \newgeometry{margin=2.54cm}%
+  \ifustc@pdf%将打印版和pdf版边距分别设置
+    \newgeometry{margin=2.54cm}%
+    \else
+    \newgeometry{left=3cm,right=2cm,top=2.54cm,bottom=2.54cm}%
+  \fi
   \pagenumbering{Alph}%
   \pagestyle{empty}%
   \ustc@makezhtitle
@@ -595,59 +698,54 @@
   \pagestyle{plain}%
 }
 
-
-% \subsection{原创性声明}
-
 % 定义原创性声明
 \newcommand\ustc@originality{%
-  \fontsize{14\bp@}{31\bp@}\selectfont 本人声明：本人所呈交的学位论文是在导师的指导下,独立进行研究工作所取%
+  \fontsize{12\bp@}{23.4\bp@}\selectfont 本人声明：本人所呈交的学位论文是在导师的指导下,独立进行研究工作所取%
   得的成果。除论文中已经注明引用的内容外，对论文的研究做出重要贡献的个%
   人和集体，均已在文中以明确方式标明。本论文中不包含任何未加明确注明的%
   其他个人或集体已经公开发表的成果。\par
   本声明的法律责任由本人承担。}
 \newcommand\ustc@authorization{%
- \fontsize{14\bp@}{31\bp@}\selectfont 本人在导师指导下所完成的论文及相关的职务作品，知识产权归属学校。学校%
- 享有以任何方式发表、复制、公开阅览、借阅以及申请专利等权利。本人离校%
- 后发表或使用学位论文或与该论文直接相关的学术论文或成果时，署名单位仍%
- 然为\ustc@universityname{}。\par
-  （保密的论文在解密后应遵守此规定）}
-%
-% 生成空的下划线
-\newcommand\ustc@underline[2][3.2cm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
-
-\newcommand\ustc@checkbox{%
-  \makebox[\z@][l]{$\square$}%
-  \raisebox{-0.2ex}{\hspace{0.1em}$\checkmark$}%
-}
+  \fontsize{12\bp@}{23.4\bp@}\selectfont 本人在导师指导下所完成的论文及相关的职务作品，知识产权归属学校。学校%
+  享有以任何方式发表、复制、公开阅览、借阅以及申请专利等权利。本人离校%
+  后发表或使用学位论文或与该论文直接相关的学术论文或成果时，署名单位仍%
+  然为\ustc@universityname{}。\\
+  （涉密论文在解密后应遵守此规定）}%
 
 \newcommand\makestatement{%
+  \ifustc@pdf%将打印版和pdf版边距分别设置
+    \newgeometry{left=3.17cm,right=3.17cm,top=2.54cm,bottom=2.54cm}%
+    \else
+    \newgeometry{left=3.67cm,right=2.67cm,top=2.54cm,bottom=2.54cm}%
+  \fi
   \begin{titlepage}%
     \ustc@pdfbookmark{原创性和授权使用声明}%
     \null
-    \vskip -0.8cm% 
+    \vskip -0.78cm
     {\centering\CJKfamily{cusong}\fontsize{18\bp@}{32\bp@}\selectfont
-      \ustc@universityname{}论文独创性声明\par}%
-    \vskip 0.33cm%
+      论文独创性声明\par}%
+    \vskip 0.35cm%
     \ustc@originality\par
-    \vskip 1.3cm%
-    {\centering\rmfamily\fontsize{14\bp@}{31\bp@}\selectfont
-      \begin{tabular}{@{}ll@{}}%
-        论文作者签名： \hspace{10em} & 年\hspace{2em}月\hspace{2em}日\hspace{2em}
-      \end{tabular}\par}%
-    \vskip 2.56cm%
+    \vskip 0.82cm%
+    % {\centering\rmfamily\fontsize{14\bp@}{31\bp@}\selectfont
+    %   \begin{tabular}{@{}ll@{}}%
+    %     论文作者签名： \hspace{10em} & 年\hspace{2em}月\hspace{2em}日\hspace{2em}
+    %   \end{tabular}\par}%
+    \hspace{10.65mm}论文作者签名：\hspace{50.8mm}年\hspace{6.35mm}月\hspace{6.35mm}日
+    \par%
+    \vskip 19.1mm%
     {\centering\CJKfamily{cusong}\fontsize{18\bp@}{32\bp@}\selectfont
-      \ustc@universityname{}论文知识产权权属声明\par}%
-    \vskip 0.33cm%
+      论文知识产权权属声明\par}%
+    \vskip 2.68mm%
     \ustc@authorization\par
-    \vskip 1.6cm%
-    {\centering\rmfamily\fontsize{14\bp@}{31\bp@}\selectfont
-      \begin{tabular}{@{}ll@{}}%
-        论文作者签名： \hspace{10em} & 年\hspace{2em}月\hspace{2em}日\hspace{2em}\\[0.56cm]
-       导师签名： & 年\hspace{2em}月\hspace{2em}日\hspace{2em} \\
-      \end{tabular}\par}%
+    \vskip 16.5mm%
+    \hspace{10.65mm}论文作者签名：\hspace{50.8mm}年\hspace{6.35mm}月\hspace{6.35mm}日
+    \par%
+    \vskip 5.5mm%
+    \hspace{10.65mm}导\hspace{2.1125mm}师\hspace{2.1125mm}签\hspace{2.1125mm}名\hspace{2.1125mm}：\hspace{50.8mm}年\hspace{6.35mm}月\hspace{6.35mm}日
   \end{titlepage}%
+  \restoregeometry
 }
-
 
 % \subsection{章节标题}
 
@@ -673,7 +771,7 @@
   \endgroup
 }
 
-% 五级节标题和脚注需要使用带圈的数字，这里使用 \cs{ustc@circlefont} 
+% 五级节标题需要使用带圈的数字
 \newcommand\ustc@textcircled[1]{%
   \ifnum\value{#1}<21\relax
     {\ustc@circlefont\symbol{\numexpr\value{#1} + "245F\relax}}%
@@ -783,16 +881,12 @@
     \ustc@pdfbookmark{#2}%
     \chaptermark{#2}%
   }%
-  \chapter*{#2}}
-  %
-  %
-  % \subsection{摘要}
-  %
-  % 中文摘要环境。
-  % 判断 \cs{ustc@tocloaded} 是为了防止本科生未调整摘要位置时的目录页码缺失。
+  \chapter*{#2}}%
+
+% 中文摘要环境。
 \newenvironment{abstract}{%
   \ustc@setchinese
-  \ustc@chapter{摘要}%
+  \ustc@chapter{\CJKfamily{zhheicu}\textbf{摘\hspace{2\ccwd}要}}%
 }{
   \par\null\par\noindent\hangindent=4\ccwd\relax
   \textbf{关键词}：\ustc@keywords
@@ -803,16 +897,13 @@
 \newenvironment{enabstract}{%
   \@openrightfalse
   \ustc@setenglish
-  \ustc@chapter{\rmfamily Abstract}%
+  \ustc@chapter{\rmfamily\textbf{Abstract}}%
   \@openrighttrue
 }{
   \par\null\par\noindent\hangindent=5.3em\relax
   \textbf{Key Words}: \ustc@enkeywords
   \ustc@setdefaultlanguage
 }
-
-
-% \subsection{目录}
 
 % 研究生规定目录另面起；
 \renewcommand\tableofcontents{%
@@ -867,12 +958,9 @@
   [2.3em]{\normalsize}
   {\contentslabel{2.3em}}{}
   {\ustc@leaders\contentspage}
-  %
-  %
-  % \subsection{符号说明}
-  %
-  % 研究生规定符号说明另页起，标题字体字号等同论文正文，
-  % 《撰写手册》第 9 页 1.10(2) 还规定“符号说明不加页码”。
+
+% 研究生规定符号说明另页起，标题字体字号等同论文正文，
+% 《撰写手册》第 9 页 1.10(2) 还规定“符号说明不加页码”。
 \newenvironment{notation}{%
   \ustc@chapter{\ustc@notationname}%
 }{}%
@@ -922,9 +1010,6 @@
   \do\*\do\-\do\~\do\'\do\"\do\-}
 \Urlmuskip=0mu plus 0.1mu
 
-% 脚注用带圈的数字：
-\renewcommand\thefootnote{\ustc@textcircled{footnote}}
-
 % LaTeX 默认脚注按章计数，即每章的开始才重置脚注计数器；我们修改为按页计数。
 % 简单的|\@addtoreset{footnote}{page}|并不可靠，
 % \footnote{\url{https://texfaq.org/FAQ-footnpp.html}}
@@ -940,11 +1025,36 @@
 \renewcommand\@makefntext[1]{%
   \parindent 2\ccwd\relax
   \noindent
-  \hb@xt@2\ccwd{\hss\@makefnmark}#1}
+  \hb@xt@5\ccwd{\hss\@makefnmark}#1}
 
+  \usepackage{xpatch}
+  % 取消上标形式，参考https://zhuanlan.zhihu.com/p/74515148
+  \xpatchcmd\@makefntext
+    {{\hss\@makefnmark}}
+    {{\hss\@makefnmark@nosuperscript}\space}
+    {}{\fail}
+  % 定义规范形式
+  \def\@makefnmark@nosuperscript{\lower 0ex \hbox{注\normalfont\@thefnmark：}}
 
-% \subsection{列表}
-% \label{sec:list}
+% 定义带注释的表格环境，参考https://www.latexstudio.net/archives/8228.html
+\newcounter{@tmarkCounter}[table]
+\newcounter{@tnoteCounter}[table]
+\newsavebox{\@tabnotebox}
+\providecommand\tmark{}
+\renewcommand\tmark[1][\stepcounter{@tmarkCounter}\the@tmarkCounter]{\makebox[0pt][l]{\textsuperscript{#1}}}%
+\providecommand\tnote{}
+\newenvironment{notetabular}[4][c]{
+  \long\def\@tabnotes{#4}%
+  \renewcommand\tnote[2][附注\stepcounter{@tnoteCounter}\the@tnoteCounter]{{\zihao{5}{##1：}\,##2\par}}
+  \begin{lrbox}{\@tabnotebox}
+  \begin{tabular*}{#2}{#3}
+  }
+  {\end{tabular*}\end{lrbox}%
+  \parbox{\wd\@tabnotebox}{
+  \usebox{\@tabnotebox}\par
+  \smallskip\@tabnotes
+    }%
+  }
 
 % 调整列表中各项之间过大的间距。
 \setlength\partopsep{\z@}
@@ -965,8 +1075,6 @@
               \labelwidth\leftmarginiii
               \advance\labelwidth-\labelsep
               \ustc@nolistsep}
-
-% \subsection{浮动体}
 
 % \LaTeX{} 对放置浮动体的要求比较强，这里按照 UK TeX FAQ 的建议
 % \footnote{\url{https://texfaq.org/FAQ-floats}} 对其适当放宽。
@@ -1071,18 +1179,12 @@
 \newcommand\bm{\symbf}
 \renewcommand\boldsymbol{\symbf}
 
-% 兼容 \pkg{amssymb} 中的命令。
-\newcommand\square{\mdlgwhtsquare}
-
 % 提供一些方便的命令：
 \newcommand\upe{\symup{e}}
 \newcommand\upi{\symup{i}}
 \newcommand\dif{\mathop{}\!\mathrm{d}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-
-
-% \subsection{参考文献}
 
 % 定义几种引用文献的标注法。
 \newcommand\bibstyle@super{\bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
@@ -1170,12 +1272,11 @@
 
 % BibTeX 生成参考文献表的样式在 \file{bst} 文件中提供。
 
-
-% \subsection{附录}
-
 % 定义了一个满足要求的总结环境：
-\newenvironment{summary}{%
-  \chapter{\ustc@summaryname}%
+\newenvironment{summary}[1][\ustc@summaryname]{%
+  \chapter*{#1}%
+  \addcontentsline{toc}{chapter}{#1}
+  \markboth{#1}{#1}
 }{}
 % 定义了一个满足要求的致谢环境：
 \newenvironment{acknowledgements}{%
@@ -1188,7 +1289,6 @@
 % \subsection{其他宏包的设置}
 
 % 这些宏包并非格式要求，但是为了方便同学们使用，在这里进行简单设置。
-
 
 % \subsubsection{\pkg{hyperref} 宏包}
 \newcommand\ustc@atendpackage{\csname ctex_at_end_package:nn\endcsname}
@@ -1263,14 +1363,18 @@
     \def\appendixautorefname{附录}
     \def\chapterautorefname~#1\null{第~#1~章\null}
     \def\sectionautorefname~#1\null{第~#1~节\null}
-    \def\subsectionautorefname~#1\null{第~#1~小节\null}
-    \def\subsubsectionautorefname~#1\null{第~#1~小小节\null}
-    \def\paragraphautorefname~#1\null{第~#1~段\null}
-    \def\subparagraphautorefname~#1\null{第~#1~小段\null}
+    \def\subsectionautorefname~#1\null{第~#1~条\null}
+    \def\subsubsectionautorefname~#1\null{第~#1~款\null}
+    \def\paragraphautorefname~#1\null{第~#1~项\null}
+    \def\subparagraphautorefname~#1\null{第~#1~目\null}
     \def\theoremautorefname{定理}
     \def\HyRef@autopageref#1{\hyperref[{#1}]{第~\pageref*{#1} 页}}
   \fi
 }
+
+% 定义一些模板中的命令
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}  % 设置命令格式
+\newcommand\pkg{\textsf}  % 设置宏包字体
 
 
 % \subsubsection{\pkg{amsthm} 宏包}

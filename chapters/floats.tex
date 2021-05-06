@@ -1,15 +1,26 @@
 % !TeX root = ../main.tex
 
-\chapter{浮动体float}
+\chapter{浮动体的排版}
+图和表应安排在主体部分中第1次提及该图、表的文字下方。
+当图或表不能安排在该页时，应安排在该页的下一页。
 
-\section{三线表}
+\section{表格}
 
-三线表是《撰写手册》推荐使用的格式，如表~\ref{tab:exampletable}。
+编制表格应简单明了，表达一致，明晰易懂，表文呼应、内容一致。
+排版时表格字号略小，或变换字体，尽量不分页，尽量不跨节。
+表格太大需要转页是，需要在续表上方注明“续表”，表头页应重复排出。
+
+\subsection{三线表}
+
+一律使用三线表，与文字齐宽，上下边线，线粗1.5 磅，表内线，线粗1 磅，
+可直接使用\verb|\toprule|、\verb|\midrule|、\verb|\cmidrule{}|、\verb|\bottomrule|生成表格线，
+如\autoref{tab:exampletable1}，使用\verb|tabular*|环境指定表格宽度，
+并利用\verb|@{\extracolsep{\fill}}|使内容自动伸展。
 \begin{table}[htb]
-  \centering\small
-  \caption{表号和表题在表的正上方}
-  \label{tab:exampletable}
-  \begin{tabular}{cl}
+  \centering
+  \caption{三线表}
+  \label{tab:exampletable1}
+  \begin{tabular*}{0.6\linewidth}{c@{\extracolsep{\fill}}*{1}{c}}
     \toprule
     类型   & 描述                                       \\
     \midrule
@@ -17,31 +28,203 @@
     无线表 & 无线表一般用于设备配置单、技术参数列表等   \\
     卡线表 & 卡线表有完全表，不完全表和三线表三种       \\
     \bottomrule
-  \end{tabular}
-  \note{注：表注分两种，第一种是对全表的注释，用不加阿拉伯数字排在表的下边，
-    前面加“注：”；第二种是和表内的某处文字或数字相呼应的注，
-    在表里面用带圈的阿拉伯数字在右上角标出，然后在表下面用同样的圈码注出来}
+  \end{tabular*}
 \end{table}
 
-编制表格应简单明了，表达一致，明晰易懂，表文呼应、内容一致。
-排版时表格字号略小，或变换字体，尽量不分页，尽量不跨节。
-表格太大需要转页是，需要在续表上方注明“续表”，表头页应重复排出。
+\subsection{附注}
+图、表中若有附注时，附注各项的序号一律用“附注 + 阿拉伯数字 + 冒号” ，如：“附注1：”。
+附注写在图、表的下方，一般采用5号宋体。
+
+针对撰写规范的规定，模板自定义了\verb|notetabular|环境创建带附注的表格，如\autoref{tab:exampletable2}。
+使用方法与\verb|tabular*|类似，只是多了\verb|\tnote|参数。
+\begin{table}
+  \centering
+  \caption{创建带附注表格}
+  \label{tab:exampletable2}
+  \begin{notetabular}{0.6\linewidth}{c@{\extracolsep{\fill}}*{2}{c}}  % 基本参数与tabular*一致
+    {
+      \tnote{竖向合并单元格，可能需要手动调整内容位置}
+      \tnote[\hspace{2\ccwd}附注4]{自定义编号和缩进}
+    }  % 附注内容须提前输入
+    \toprule
+    \multirow{2}{*}[-1.5mm]{Header 1\tmark} & \multicolumn{2}{c}{Header 2}\\
+    \cmidrule{2-3}
+    & Header 2.1& Header 2.2\\
+    \midrule
+    foo 1\tmark[4] & foo 2\tmark[4] & foo 3\\
+    \bottomrule
+  \end{notetabular}
+\end{table}
+
+\subsection{长表格}
+
+如某个表需要转页接排，在随后的各页上应重复表的编排，
+编号后跟表题（可省略）和“（续）”，
+可以使用\pkg{longtable}宏包创建跨页表格。
+续表应重复表头和关于单位的陈述。
+
+\begin{longtable}{l@{\extracolsep{\fill}}*{1}{l}}
+  \caption{\pkg{longtable}命令汇总\label{tab:exampletable3}} \\
+  \toprule
+  命令& 说明\\
+  \midrule
+  \endfirsthead
+  \multicolumn{2}{l}{（续）}\\
+  \toprule
+  命令& 说明\\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  \bottomrule
+  \bottomrule[0pt]  % 添加间距
+  \multicolumn{2}{l}{附注1：该命令产生的是页脚注，见\autoref{section:footnote}；}\\
+  \multicolumn{2}{l}{附注2：使用tmark（见\autoref{tab:exampletable2}）配合endlatfoot创建长表格附注。}\\
+  \endlastfoot
+  不填写（默认）& 表格居中\\
+  \verb|[c]|& 表格居中\\
+  \verb|[l]|& 表格左对齐\\
+  \verb|[r]|& 表格右对齐\\
+  \verb|\\|& 结束一行表格\\
+  \verb|\\[距离]|& 结束一行，并增加额外间距\\
+  \multicolumn{2}{c}{（以下是为方便演示增加的额外间距）}\\[13cm]
+  \verb|\\*|& 结束一行，并禁止在此分页\\*
+  \verb|\kill|& 当前行不输出，只参与宽度计算\\
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\kill
+  \verb|\endhead|& 此命令以上部分是每页的表头\\
+  \verb|\endfirsthead|& 此命令以上部分是表格第一页的表头\\
+  \verb|\endfoot|& 此命令以上部分是每页的表尾\\
+  \verb|\endlastfoot|& 此命令以上部分是表格最后一页的表尾\\
+  \verb|\caption{标题}|& 生成带编号的标题\\
+  \verb|\caption*{标题}|& 生成不带编号的标题\\
+  \verb|\newpage|& 强制分页\\
+  \verb|\pagebreak[程度]|& 允许分页的程度（0-4）\\
+  \verb|\nopagebreak[程度]|& 禁止分页的程度（0-4）\\
+  \verb|\footnote|\tmark[1]& 使用脚注，注意不能用在表格头尾\\
+  \verb|\footnotemark|& 单独产生脚注编号，不能用在表格头尾\\
+  \verb|\footnotetext|& 单独产生脚注文字\\
+  \verb|\LTleft|& 对齐方式留空时，表格左边的间距，默认为\verb|\fill|\\
+  \verb|\LTright|& 对齐方式留空时，表格右边的间距，默认为\verb|\fill|\\
+  \verb|\LTpre|& 表格上方间距，默认为\verb|\bigskipamount|\\
+  \verb|\LTpost|& 表格下方间距，默认为\verb|\bigskipamount|\\
+  \verb|\LTcapwidth|& 表格标题的宽度，默认为4\,in\\
+\end{longtable}
 
 
+\section{图}
+图包括曲线图、结构图、示意图、图解、框图、流程图、记录图、布置图、地图、照片、图版等。
+图应具有“自明性”，即只看图、图题和图例，不阅读正文，就可理解图意。
+图的编号应采用阿拉伯数字分章依续编号，如：“\autoref{fig:epslogo}”。
 
-\section{插图}
-
+\subsection{插入图片}
 有的同学可能听说“\LaTeX{} 只能使用 eps 格式的图片”，甚至把 jpg 格式转为 eps。
 事实上，这种做法已经过时。
 而且每次编译时都要要调用外部工具解析 eps，导致降低编译速度。
 所以我们推荐矢量图直接使用 pdf 格式，位图使用 jpeg 或 png 格式。
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.3\textwidth]{figures/chdcolorlogo.eps}
-  \caption{图号、图题置于图的下方}
-  \label{fig:logo}
-  \note{注：图注的内容不宜放到图题中。}
+  \includegraphics[width=0.35\linewidth]{chdcolorlogo.eps}
+  \caption{插入eps图片}
+  \label{fig:epslogo}
+  \note{附注1：现已不推荐使用。}
 \end{figure}
 
+\pkg{Texlive}中有许多自带的工具，比如可以利用\pkg{epstopdf}将eps图片转为pdf，
+利用\pkg{pdfcrop}裁剪pdf图片，这些工具可在
+\,\verb|Texlive|\verb|\版本|\verb|\bin|\verb|\win32|\,文件夹中找到，
+或者直接通过命令行使用，本模板\pkg{figure}文件夹中的pdf即是通过\pkg{epstopdf}得到的。
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.35\linewidth]{chdcolorlogo.pdf}
+  \caption{插入pdf图片}
+  \label{fig:pdflogo}
+\end{figure}
+
+\subsection{并排放置图片}
+
 关于图片的并排，推荐使用较新的 \pkg{subcaption} 宏包，
-不建议使用 \pkg{subfigure} 或 \pkg{subfig} 等宏包。
+不建议使用 \pkg{subfigure} 或 \pkg{subfig} 等宏包。\footnote{此三个宏包不能同时导入}
+以下为\pkg{subcaption} 宏包几种排列子图的方法。
+\begin{figure}
+  \centering
+  \subcaptionbox{logo1\label{fig:logo1}}[.3\linewidth]{\includegraphics[width=.7\linewidth]{chdredlogo.pdf}}
+  \subcaptionbox{logo2\label{fig:logo2}}[.3\linewidth]{\includegraphics[width=.7\linewidth]{chdredlogo.pdf}}
+  \caption{使用\textsf{subcaptionbox}排列子图}
+  \note{附注1：使用\textsf{subcaptionbox}时，\textsf{label应放在标题中}}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdbluelogo.pdf}
+    \caption{logo1}
+  \end{subfigure}
+  \begin{subfigure}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdbluelogo.pdf}
+    \caption{logo2}
+  \end{subfigure}
+  \caption{使用\textsf{subfigure}排列子图}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{minipage}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdblacklogo.pdf}
+    \subcaption{logo1}
+  \end{minipage}
+  \centering
+  \begin{minipage}{.3\linewidth}
+    \centering
+    \includegraphics[width=.7\linewidth]{chdblacklogo.pdf}
+    \subcaption{logo2}
+  \end{minipage}
+  \caption{使用使用\textsf{minipage}和\textsf{subcaption}排列子图}
+\end{figure}
+
+\subsection{跨页放置图片}
+
+跨页放置子图，需要定义两个\pkg{figure}环境，并对\pkg{figure}的计数器进行修改，
+好在\pkg{caption}提供了一个简化的操作，通过\verb|\ContinuedFloat|命令即可实现计数器的接续,
+如\autoref{fig:cross}。
+\begin{figure}[b]
+  \centering
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdblacklogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdblacklogo.pdf}
+    \caption{blacklogo}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdbluelogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdbluelogo.pdf}
+    \caption{bluelogo}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \ContinuedFloat
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdredlogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdredlogo.pdf}
+    \caption{redlogo}
+  \end{subfigure}
+  \begin{subfigure}{\linewidth}
+    \centering
+    \includegraphics[width=.4\linewidth]{chdcolorlogo.pdf}
+    \hspace{1cm}
+    \includegraphics[width=.4\linewidth]{chdcolorlogo.pdf}
+    \caption{colorlogo}
+  \end{subfigure}
+  \caption{使用\textsf{ContinuedFloat}排版跨页图片\label{fig:cross}}
+\end{figure}
+
+\mbox{}

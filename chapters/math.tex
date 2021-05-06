@@ -55,8 +55,7 @@
   \item $\argmin$：\verb|\argmin|
 \end{itemize}
 
-关于数学符号更多的用法，参见 \pkg{unicode-math} 宏包的使用说明和符号列表
-\pkg{unimath-symbols}。
+关于数学符号更多的用法，参见\pkg{unicode-math}宏包和\pkg{unimath-symbols}文档。
 
 在编辑数学公式时，最好避免直接使用字体命令，
 而应该定义一些语义命令取代字体命令，
@@ -66,6 +65,7 @@
   \item 向量 $\vec{x}$：\verb|\renewcommand\vec{\symbf}|
   \item 矩阵 $\mat{A}$：\verb|\newcommand\mat{\symbf}|
   \item 张量 $\ts{T}$： \verb|\newcommand\ts{\symbfsf}|
+  \item 实数$\real$: \verb|\newcommand\real{\mathbf{R}}|
 \end{itemize}
 
 更多的例子：
@@ -81,7 +81,6 @@
 \begin{equation}
   \mat{A} \vec{x} = \lambda \vec{x}
 \end{equation}
-
 
 
 \section{定理和证明}
