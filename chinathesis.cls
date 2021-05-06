@@ -468,7 +468,8 @@
 \ustc@define@term{major}{XXX}
 \ustc@define@term{supervisor}{XXX\quad 教授}
 \ustc@define@term{cosupervisor}{}
-\ustc@define@term{date}{\zhnumsetup{time=Chinese}\zhtoday}
+\ustc@define@term{submissiondate}{\zhnumsetup{time=Arabic}\zhtoday}
+\ustc@define@term{defensedate}{\zhnumsetup{time=Arabic}\zhtoday}
 \ustc@define@term{professionaltype}{专业学位类型}
 \ustc@define@term{secretlevel}{}
 \ustc@define@term{secretyear}{}
@@ -543,7 +544,7 @@
       \begin{tabular}{lp{8em}rp{8em}}
      导师姓名职称 & \multicolumn{3}{c}{\ustc@supervisor} \\\cline{2-4}    
      申请学位级别 &  \multicolumn{1}{c}{\ustc@professionaltype} &学科专业名称 &  \multicolumn{1}{c}{\ustc@major}\\\cline{2-2}\cline{4-4}
-     论文提交日期 & \multicolumn{1}{c}{\ustc@date} & 论文答辩日期 &\multicolumn{1}{c}{\ustc@date} \\\cline{2-2}\cline{4-4}    
+     论文提交日期 & \multicolumn{1}{c}{\ustc@submissiondate} & 论文答辩日期 &\multicolumn{1}{c}{\ustc@defensedate} \\\cline{2-2}\cline{4-4}    
      学位授予单位 & \multicolumn{3}{c}{长安大学} \\\cline{2-4}    
      \end{tabular}\par}%
   \end{titlepage}%
