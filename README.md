@@ -2,7 +2,7 @@
 
 本模板基于chinathesis https://github.com/latexstudio/ChinaThesis 项目二次开发，感谢zepinglee同学。
 
-包含硕士和博士两个选项，本科模板与研究生格式相差较大，可以使用我之前写的模板https://github.com/xiaoleeza/chdpaper 。
+包含专业型硕士、学术型硕士和博士三个选项，本科模板与研究生格式相差较大，可以使用我之前写的模板https://github.com/xiaoleeza/chdpaper 。
 
 使用方法与chinathesis基本一致，下面贴出原贴使用说明：
 
@@ -20,8 +20,9 @@
 - 单元测试（l3build）
 - 持续集成（travis-ci）
 
-![](./githubimg/doctor.jpg)
-![](./githubimg/master.jpg)
+![](./githubimg/doctor.png)
+![](./githubimg/master.png)
+![](./githubimg/profmaster.png)
 
 ## 使用模板
 
