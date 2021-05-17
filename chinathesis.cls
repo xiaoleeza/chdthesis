@@ -669,8 +669,7 @@
   \begin{titlepage}%
     \ustc@pdfbookmark{Title page}%
     \centering
-    \mbox{}
-    \vskip 3.15cm%
+    \vspace*{3.15cm}%
     \parbox[t][3.3cm][t]{\textwidth}{%
       \centering\rmfamily\bfseries\fontsize{18\bp@}{30\bp@}\selectfont
       \ustc@entitle\par}\par
@@ -720,8 +719,8 @@
   \fi
   \begin{titlepage}%
     \ustc@pdfbookmark{原创性和授权使用声明}%
-    \null
-    \vskip -0.78cm
+    % \null
+    \vspace*{-0.78cm}
     {\centering\CJKfamily{cusong}\fontsize{18\bp@}{32\bp@}\selectfont
       论文独创性声明\par}%
     \vskip 0.35cm%
