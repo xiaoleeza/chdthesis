@@ -618,7 +618,7 @@
       \end{tabular}\\}
     \fi}
     \vskip 1.1cm%
-    \centering\includegraphics[width=5.41cm]{figures/name.jpg} \\
+    \centering\includegraphics[width=5.41cm]{figures/name.pdf} \\
     \vskip 0.38cm%
     {\fontsize{45\bp@}{45\bp@}\selectfont
       \ustc@thesisname\par}%
