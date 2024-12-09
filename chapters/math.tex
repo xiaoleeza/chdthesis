@@ -2,91 +2,95 @@
 
 \chapter{数学}
 
-\section{数字和单位}
+\section{数学符号}
 
+《撰写手册》要求数学符号遵循 GB/T 3102.11—1993《物理科学和技术中使用的数学符号》
+\footnote{原 GB 3102.11—1993，自 2017 年 3 月 23 日起，该标准转为推荐性标准。}。
+该标准参照采纳 ISO 31-11:1992 \footnote{目前已更新为 ISO 80000-2:2019。}，
+但是与 \TeX{} 默认的美国数学学会（AMS）的符号习惯有所区别。
+具体地来说主要有以下差异：
+\begin{enumerate}
+  \item 大写希腊字母默认为斜体，如
+    \begin{equation*}
+      \Gamma \Delta \Theta \Lambda \Xi \Pi \Sigma \Upsilon \Phi \Psi \Omega.
+    \end{equation*}
+    注意有限增量符号 $\increment$ 固定使用正体，模板提供了 \cs{increment} 命令。
+  \item 小于等于号和大于等于号使用倾斜的字形 $\le$、$\ge$。
+  \item 积分号使用正体，比如 $\int$、$\oint$。
+  \item
+    偏微分符号 $\partial$ 使用正体。
+  \item
+    省略号 \cs{dots} 按照中文的习惯固定居中，比如
+    \begin{equation*}
+      1, 2, \dots, n \quad 1 + 2 + \dots + n.
+    \end{equation*}
+  \item
+    实部 $\Re$ 和虚部 $\Im$ 的字体使用罗马体。
+\end{enumerate}
+
+以上数学符号样式的差异可以在模板中统一设置。
+但是还有一些需要用户在写作时进行处理：
+\begin{enumerate}
+  \item 数学常数和特殊函数名用正体，如
+    \begin{equation*}
+      \uppi = 3.14\dots; \quad
+      \symup{i}^2 = -1; \quad
+      \symup{e} = \lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n.
+    \end{equation*}
+  \item 微分号使用正体，比如 $\dif y / \dif x$。
+  \item 向量、矩阵和张量用粗斜体（\cs{symbf}），如 $\symbf{x}$、$\symbf{\Sigma}$、$\symbfsf{T}$。
+  \item 自然对数用 $\ln x$ 不用 $\log x$。
+\end{enumerate}
+
+模板中使用 \pkg{unicode-math} 宏包配置数学字体。
+该宏包与传统的 \pkg{amsfonts}、\pkg{amssymb}、\pkg{bm}、
+\pkg{mathrsfs}、\pkg{upgreek} 等宏包\emph{不}兼容。
+本模板作了处理，用户可以直接使用 \cs{bm}, \cs{mathscr},
+\cs{upGamma} 等命令。
+关于数学符号更多的用法，参见 \pkg{unicode-math} 宏包的使用说明和符号列表
+\pkg{unimath-symbols}。
+
+
+
+\section{数学公式}
+
+数学公式可以使用 \env{equation} 和 \env{equation*} 环境。
+注意数学公式的引用应前后带括号，建议使用 \cs{eqref} 命令，比如式~\eqref{eq:example}。
+\begin{equation}
+  \hat{f}(\xi) = \int_{-\infty}^\infty f(x) \eu^{-2 \uppi \iu x \xi} \dif x.
+  \label{eq:example}
+\end{equation}
+
+多行公式尽可能在“=”处对齐，推荐使用 \env{align} 环境，比如式~\eqref{eq:align_2}。
+\begin{align}
+  a & = b + c + d + e \label{eq:align_1} \\
+    & = f + g. \label{eq:align_2}
+\end{align}
+
+
+
+\section{量和单位}
+
+量和单位要求严格执行 GB 3100～3102—1993 有关量和单位的规定。
 宏包 \pkg{siunitx} 提供了更好的数字和单位支持：
 \begin{itemize}
-  \item \num{12345.67890}
-  \item \num{1+-2i}
-  \item \num{.3e45}
-  \item \num{1.654 x 2.34 x 3.430}
-  \item \si{kg.m.s^{-1}}
-  \item \si{\micro\meter} $\si{\micro\meter}$
-  \item \si{\ohm} $\si{\ohm}$
-  \item \numlist{10;20}
-  \item \numlist{10;20;30}
-  \item \SIlist{0.13;0.67;0.80}{\milli\metre}
-  \item \numrange{10}{20}
-  \item \SIrange{10}{20}{\degreeCelsius}
+  \item 为了阅读方便，四位以上的整数或小数推荐采用千分空的分节方式：\num{55235367.34623}。
+    四位以内的整数可以不加千分空：\num{1256}。
+  \item 数值与单位符号间留适当空隙：\SI{25.4}{mm}，\SI{5.97e24}{\kilo\gram}，
+    \SI{-273.15}{\degreeCelsius}。 例外：\SI{12.3}{\degree}，\ang{1;2;3}。
+  \item 组合单位默认使用 APS 的格式，即相乘的单位之间留一定空隙： \si{kg.m.s^{-2}}，
+    也可以使用居中的圆点： \si[inter-unit-product = \ensuremath{{}\cdot{}}]{kg.m.s^{-2}}。
+    GB 3100—1993 对两者都允许，建议全文统一设置。
+  \item 量值范围使用“～”：\SIrange{10}{15}{mol/L}。
+  \item 注意：词头 \textmu{} 不能写为 u，如：\si{umol} 应为 \si{\micro\mole}、\si{\umol}。
 \end{itemize}
 
-
-
-\section{数学符号和公式}
-
-\LaTeX{} 默认按照美国的习惯排版数学公式和符号，
-但是《撰写手册》要求数学符号依据《GB 3102.11--1993》执行，
-与 \LaTeX{} 的习惯有所差异。
-本模板基于 \pkg{unicode-math} 配置数学符号，以遵循国标的规定。
-
-注意，\pkg{unicode-math} 宏包与 \pkg{amsfonts}, \pkg{amssymb}, \pkg{bm},
-\pkg{mathrsfs}, \pkg{upgreek} 等宏包\emph{不}兼容。
-本模板作了处理，用户可以直接使用这些宏包的命令，如 \cs{bm}, \cs{mathscr},
-\cs{upGamma}。
-
-本模板中数学符号的用法与 \LaTeX{} 传统有些区别：
-\begin{itemize}
-  \item 数学常数和特殊函数使用正体，
-    如圆周率 $\symup{\pi}$、$\symup{\Gamma}$ 函数。
-    应使用 \pkg{unicode-math} 宏包提供的 \cs{symup} 命令转为正体，
-    如 \verb|\symup{\pi}|。
-  \item 向量和矩阵粗斜体，应使用 \cs{symbf} 命令，
-    如 \verb|\symbf{u}|、\verb|\symbf{A}|。
-  \item 有限增量符号 $\increment$ （U+2206）应使用 \cs{increment} 命令。
-  \item 微分符号 $\dif$ 使用正体，本模板提供了 \cs{dif} 命令。
-\end{itemize}
-
-除此之外，模板还提供了一些命令方便使用：
-\begin{itemize}
-  \item 常数 $\upe$：\verb|\upe|
-  \item 负数单位 $\upi$：\verb|\upi|
-  \item 圆周率 $\uppi$：\verb|\uppi|
-  \item $\argmax$：\verb|\argmax|
-  \item $\argmin$：\verb|\argmin|
-\end{itemize}
-
-关于数学符号更多的用法，参见\pkg{unicode-math}宏包和\pkg{unimath-symbols}文档。
-
-在编辑数学公式时，最好避免直接使用字体命令，
-而应该定义一些语义命令取代字体命令，
-这样输入更简单，也让 \LaTeX{} 代码更有可读性，
-而且还方便根据需要统一修改改格式，比如：
-\begin{itemize}
-  \item 向量 $\vec{x}$：\verb|\renewcommand\vec{\symbf}|
-  \item 矩阵 $\mat{A}$：\verb|\newcommand\mat{\symbf}|
-  \item 张量 $\ts{T}$： \verb|\newcommand\ts{\symbfsf}|
-  \item 实数$\real$: \verb|\newcommand\real{\mathbf{R}}|
-\end{itemize}
-
-更多的例子：
-\begin{equation}
-  \upe^{\upi\uppi} + 1 = 0
-\end{equation}
-\begin{equation}
-  \frac{\dif^2 u}{\dif t^2} = \int f(x) \dif x
-\end{equation}
-\begin{equation}
-  \argmin_x f(x)
-\end{equation}
-\begin{equation}
-  \mat{A} \vec{x} = \lambda \vec{x}
-\end{equation}
 
 
 \section{定理和证明}
 
 示例文件中使用 \pkg{amsthm} 宏包配置了定理、引理和证明等环境。
-用户也可以使用  \pkg{ntheorem} 宏包。
+用户也可以使用 \pkg{ntheorem} 宏包。
 
 \begin{definition}
   If the integral of function $f$ is measurable and non-negative, we define
@@ -99,8 +103,12 @@
   finite measure.
 \end{definition}
 
+\begin{assumption}
+The communication graph is strongly connected.
+\end{assumption}
+
 \begin{example}
-  Simple examples of functions on $\real^d$ that are integrable
+  Simple examples of functions on $\mathbb{R}^d$ that are integrable
   (or non-integrable) are given by
   \begin{equation}
     f_a(x) =
@@ -110,7 +118,7 @@
     \end{cases}
   \end{equation}
   \begin{equation}
-    F_a(x) = \frac{1}{1 + |x|^a}, \qquad \text{all } x \in \real^d.
+    F_a(x) = \frac{1}{1 + |x|^a}, \qquad \text{all } x \in \mathbb{R}^d.
   \end{equation}
   Then $f_a$ is integrable exactly when $a < d$, while $F_a$ is integrable
   exactly when $a > d$.
@@ -139,7 +147,7 @@
 \end{corollary}
 
 \begin{proposition}
-  Suppose $f$ is integrable on $\real^d$. Then for every $\epsilon > 0$:
+  Suppose $f$ is integrable on $\mathbb{R}^d$. Then for every $\epsilon > 0$:
   \begin{enumerate}
     \renewcommand{\theenumi}{\roman{enumi}}
     \item There exists a set of finite measure $B$ (a ball, for example) such
@@ -190,21 +198,3 @@
 \begin{proof}[A concise proof]
   Obvious.
 \end{proof}
-
-\section{算法}
-\begin{algorithm}[H]
-\SetAlgoLined
-\KwData{this text}
-\KwResult{how to write algorithm with \LaTeX2e }
-initialization\;
-\While{not at end of this document}{
-read current\;
-\eIf{understand}{
-go to next section\;
-current section becomes this one\;
-}{
-go back to the beginning of current section\;
-}
-}
-\caption{How to write algorithms}
-\end{algorithm}

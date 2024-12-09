@@ -1,0 +1,19 @@
+\ProvidesFile{chdthesis-bachelor.bbx}[2021/01/19 v1.0 CHDThesis biblatex
+  bibliography style]
+
+\RequireBibliographyStyle{gb7714-2015}
+
+\ExecuteBibliographyOptions{
+  gbpub   = false,
+  gbalign = left,
+  url     = false,
+  doi     = false,
+}
+
+\DeclareFieldFormat{journaltitle}{%
+  \iffieldequalstr{userd}{english}{%
+    \mkbibemph{#1}%
+  }{%
+    #1\isdot
+  }%
+}

@@ -1,0 +1,97 @@
+% !TeX root = ./main.tex
+
+\chdsetup{
+  title              = {长安大学\\学位论文模板示例文档 v\chdthesisversion},
+  title*             = {An example of thesis template for Chang'an University of China v\chdthesisversion},
+  author             = {东方仁},
+  author*            = {Dong Fangren},
+  speciality         = {信息与通信工程},
+  speciality*        = {Information and Communication Engineering},
+  supervisor         = {XXX~教授, XXX~教授},
+  supervisor*        = {Prof. XXX, Prof. XXX},
+  class-number       = {TP391}, % 分类号
+  student-id         = {2020000000},  % 学号
+  % date               = {2017-05-01},  % 默认为今日
+  % professional-type  = {专业学位类型},
+  % professional-type* = {Professional degree type},
+  % department         = {数学科学学院},  % 院系，本科生需要填写
+  % secret-level       = {秘密},     % 绝密|机密|秘密|控阅，注释本行则公开
+  % secret-level*      = {Secret},  % Top secret | Highly secret | Secret
+  % secret-year        = {10},      % 保密/控阅期限
+  % reviewer           = true,      % 声明页显示“评审专家签名”
+  %
+  % 数学字体
+  % math-style         = GB,  % 可选：GB, TeX, ISO
+  math-font          = xits,  % 可选：stix, xits, libertinus
+}
+
+
+% 加载宏包
+
+% 定理类环境宏包
+\usepackage{amsthm}
+
+% 插图
+\usepackage{graphicx}
+
+% 三线表
+\usepackage{booktabs}
+
+% 表注
+\usepackage{threeparttable}
+
+% 跨页表格
+\usepackage{longtable}
+
+% 算法
+\usepackage[ruled,linesnumbered]{algorithm2e}
+
+% SI 量和单位
+\usepackage{siunitx}
+
+% 参考文献使用 BibTeX + natbib 宏包
+% 顺序编码制
+\usepackage[sort]{natbib}
+\bibliographystyle{chdthesis-numerical}
+
+% 著者-出版年制
+% \usepackage{natbib}
+% \bibliographystyle{chdthesis-authoryear}
+
+% 本科生参考文献的著录格式
+% \usepackage[sort]{natbib}
+% \bibliographystyle{chdthesis-bachelor}
+
+% 参考文献使用 BibLaTeX 宏包
+% \usepackage[style=chdthesis-numeric]{biblatex}
+% \usepackage[bibstyle=chdthesis-numeric,citestyle=chdthesis-inline]{biblatex}
+% \usepackage[style=chdthesis-authoryear]{biblatex}
+% \usepackage[style=chdthesis-bachelor]{biblatex}
+% 声明 BibLaTeX 的数据库
+% \addbibresource{bib/chd.bib}
+
+% 配置图片的默认目录
+\graphicspath{{figures/}}
+
+% 数学命令
+\makeatletter
+\newcommand\dif{%  % 微分符号
+  \mathop{}\!%
+  \ifchd@math@style@TeX
+    d%
+  \else
+    \mathrm{d}%
+  \fi
+}
+\makeatother
+\newcommand\eu{{\symup{e}}}
+\newcommand\iu{{\symup{i}}}
+
+% 用于写文档的命令
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+\DeclareRobustCommand\env[1]{\texttt{#1}}
+\DeclareRobustCommand\pkg[1]{\textsf{#1}}
+\DeclareRobustCommand\file[1]{\nolinkurl{#1}}
+
+% hyperref 宏包在最后调用
+\usepackage{hyperref}
