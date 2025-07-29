@@ -1,5 +1,5 @@
 MAIN = main
-NAME = chinathesis
+NAME = chdthesis
 CLSFILES = $(NAME).cls
 BSTFILES = $(NAME)-numerical.bst $(NAME)-authoryear.bst
 

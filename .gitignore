@@ -1,7 +1,10 @@
 main.pdf
-chinathesis.pdf
+chdthesis-doc.pdf
 *.hd
-build
+
+## test files:
+build/
+test/**/*.pdf
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -68,6 +71,9 @@ acs-*.bib
 
 # changes
 *.soc
+
+# comment
+*.cut
 
 # cprotect
 *.cpt
@@ -209,6 +215,9 @@ pythontex-files-*/
 
 # easy-todo
 *.lod
+
+# xcolor
+*.xcp
 
 # xmpincl
 *.xmpi
